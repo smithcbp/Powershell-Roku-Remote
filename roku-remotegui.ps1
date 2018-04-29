@@ -11,9 +11,9 @@
 #>
 
 Add-Type -AssemblyName System.Windows.Forms
-[System.Windows.Forms.Application]::EnableVisualStyles()
 Add-Type -AssemblyName System.Drawing
 Add-Type -AssemblyName PresentationFramework
+[System.Windows.Forms.Application]::EnableVisualStyles()
 
 #region begin GUI
 
@@ -149,7 +149,7 @@ $Label1.forecolor                = 'Cyan'
 
 $Form.controls.AddRange(@($UpButton,$DownButton,$RightButton,$SelectButton,$LeftButton,$BackButton,$HomeButton,$RebootButton,$AppsButton,$RokuList,$Label1,$InfoButton,$RRButton,$PlayButton,$FFButton))
 
-#endregion GUI
+#endregion
 
 if (!(Test-Path .\Roku-remote.psm1)){
     Write-Error -Message 'Please download Roku-commands.psm1 from https://github.com/smithcbp/Powershell-Roku-Remote and place into the same folder as Roku-remote.ps1'
@@ -158,7 +158,7 @@ if (!(Test-Path .\Roku-remote.psm1)){
 
 Import-Module (Resolve-Path('Roku-remote.psm1'))
 
-#region gui events
+#region GUI events
 
 $UpButton.Add_Click({
     $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
