@@ -12,7 +12,7 @@ Ip            Name                          Model                Description
 192.168.0.110 Bedroom Roku Stick           Roku Stick 3500X     Bedroom Roku Stick | 192.168.0.110
 192.168.0.111 Roku Express                 Roku Express 3700X   Roku Express  | 192.168.0.111
 
-Send-RokuXXX -ip $Ip
+Send-RokuCommand -ip $IP -rokucommand 'Home'
 RebootMacro -ip $Ip
 Open-RokuApp -ip $Ip
 
@@ -74,7 +74,11 @@ Function Send-RokuCommand {
 }
 
 Function Send-RokuRebootMacro {
-    param([string]$Ip)
+    param(
+    [Parameter(Mandatory)] 
+    [string]
+    $Ip
+    )
     Send-RokuCommand -ip $Ip -RokuCommand 'Home'
     Start-Sleep -Seconds 2
     Send-RokuCommand -ip $Ip -RokuCommand 'Home'
@@ -111,7 +115,11 @@ Function Send-RokuRebootMacro {
     }
 
 Function Open-RokuApp {
-    param([string]$Ip)
+    param(
+    [Parameter(Mandatory)] 
+    [string]
+    $Ip
+    )
     
 #region WPF Form App Selection List
 
