@@ -4,9 +4,9 @@
 A collection of functions for discovering and controlling local Roku devices.
 Import-Module .\roku-commands.psm1
 
-.EXAMPLE
+.Notes
 
-PS C:\Scripts> Discover-Rokus
+Discover-Rokus
 Ip            Name                          Model                Description
 --            ----                          -----                -----------
 192.168.0.110 Bedroom Roku Stick           Roku Stick 3500X     Bedroom Roku Stick | 192.168.0.110
@@ -25,6 +25,8 @@ RawContent        : HTTP/1.1 200 OK
 Headers           : {[Content-Length, 0], [Server, Roku UPnP/1.0 MiniUPnPd/1.4]}
 RawContentLength  : 0
 
+Press-XXX -ip 192.168.0.150
+RebootMacro
 
 #>
 
