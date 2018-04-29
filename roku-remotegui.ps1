@@ -95,56 +95,56 @@ $RRButton.text                   = "«"
 $RRButton.width                  = 50
 $RRButton.height                 = 50
 $RRButton.location               = New-Object System.Drawing.Point(110,460)
-$RRButton.Font                   = 'Microsoft Sans Serif,16'
-$RRButton.BackColor              = "Cyan"
+$RRButton.font                   = 'Microsoft Sans Serif,16'
+$RRButton.backColor              = "Cyan"
 
 $PlayButton                      = New-Object System.Windows.Forms.Button
 $PlayButton.text                 = "►"
 $PlayButton.width                = 50
 $PlayButton.height               = 50
 $PlayButton.location             = New-Object System.Drawing.Point(176,460)
-$PlayButton.Font                 = 'Microsoft Sans Serif,16'
-$PlayButton.BackColor            = "Cyan"
+$PlayButton.font                 = 'Microsoft Sans Serif,16'
+$PlayButton.backColor            = "Cyan"
 
 $FFButton                        = New-Object System.Windows.Forms.Button
 $FFButton.text                   = "»"
 $FFButton.width                  = 50
 $FFButton.height                 = 50
 $FFButton.location               = New-Object System.Drawing.Point(240,460)
-$FFButton.Font                   = 'Microsoft Sans Serif,16'
-$FFButton.BackColor              = "Cyan"
+$FFButton.font                   = 'Microsoft Sans Serif,16'
+$FFButton.backColor              = "Cyan"
 
 $RebootButton                    = New-Object System.Windows.Forms.Button
 $RebootButton.text               = "Reboot"
 $RebootButton.width              = 100
 $RebootButton.height             = 50
 $RebootButton.location           = New-Object System.Drawing.Point(260,520)
-$RebootButton.Font               = 'Microsoft Sans Serif,12'
-$RebootButton.BackColor          = "Cyan"
+$RebootButton.font               = 'Microsoft Sans Serif,12'
+$RebootButton.backColor          = "Cyan"
 
 $AppsButton                      = New-Object System.Windows.Forms.Button
 $AppsButton.text                 = "Apps"
 $AppsButton.width                = 100
 $AppsButton.height               = 50
 $AppsButton.location             = New-Object System.Drawing.Point(40,520)
-$AppsButton.Font                 = 'Microsoft Sans Serif,12'
-$AppsButton.BackColor            = "Cyan"
+$AppsButton.font                 = 'Microsoft Sans Serif,12'
+$AppsButton.backColor            = "Cyan"
 
 $RokuList                        = New-Object System.Windows.Forms.ListBox
 $RokuList.width                  = 360
 $RokuList.height                 = 130
 $RokuList.location               = New-Object System.Drawing.Point(20,54)
-$RokuList.Font                   = 'Consolas,14'
-$RokuList.HorizontalScrollbar    = $true
+$RokuList.font                   = 'Consolas,14'
+$RokuList.horizontalscrollbar    = $true
 
 $Label1                          = New-Object System.Windows.Forms.Label
 $Label1.text                     = "Select your Roku"
-$Label1.AutoSize                 = $true
+$Label1.autoSize                 = $true
 $Label1.width                    = 25
 $Label1.height                   = 10
 $Label1.location                 = New-Object System.Drawing.Point(62,10)
-$Label1.Font                     = 'Consolas,18'
-$Label1.ForeColor                = "Cyan"
+$Label1.font                     = 'Consolas,18'
+$Label1.forecolor                = "Cyan"
 
 $Form.controls.AddRange(@($UpButton,$DownButton,$RightButton,$SelectButton,$LeftButton,$BackButton,$HomeButton,$RebootButton,$AppsButton,$RokuList,$Label1,$InfoButton,$RRButton,$PlayButton,$FFButton))
 
