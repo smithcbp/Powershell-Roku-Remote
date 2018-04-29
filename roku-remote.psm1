@@ -164,7 +164,7 @@ Function Open-RokuApp {
     $Listbox.location               = New-Object System.Drawing.Point(10,40)
     $Listbox.size                   = New-Object System.Drawing.Size(313,20)
     $Listbox.height                 = 500
-    $Listbox.font                   = New-Object System.Drawing.Font('Comic Sans MS',16,[System.Drawing.FontStyle]::Bold)
+    $Listbox.font                   = New-Object System.Drawing.Font('Consolas','14',[System.Drawing.FontStyle]::Bold)
 
     $Form.Controls.AddRange(@($Label,$CancelButton,$OKButton,$Listbox))
 
