@@ -1,4 +1,6 @@
+~~~~~~~~~~~~~~~~~
 roku-remote.psm1
+~~~~~~~~~~~~~~~~~
 
 A collection of Roku remote functions.
 
@@ -11,8 +13,8 @@ Launch-App $ip will open a GUI to select an app to launch on the specified Roku
 RebootMacro $ip will simulate all the button presses to reboot the specified Roku
 
 
-
+~~~~~~~~~~~~~~~~~~~
 roku-remotegui.ps1
-
+~~~~~~~~~~~~~~~~~~~
 Launch a WPF GUI Roku remote.
 
