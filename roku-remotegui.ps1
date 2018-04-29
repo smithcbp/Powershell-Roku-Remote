@@ -220,6 +220,11 @@ $RebootButton.Add_Click({
 
 #endregion GUI
 
+if (!(Test-Path .\roku-remote.psm1)){
+    Write-Error -Message "Please download roku-commands.psm1 from XXX and place into the same folder as roku-remote.ps1"
+    Return
+    }
+
 Import-Module (Resolve-Path('roku-remote.psm1'))
 
 $rokus = Discover-Rokus
