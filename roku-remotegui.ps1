@@ -150,88 +150,88 @@ $Form.controls.AddRange(@($UpButton,$DownButton,$RightButton,$SelectButton,$Left
 
 #endregion GUI
 
-if (!(Test-Path .\roku-remote.psm1)){
-    Write-Error -Message "Please download roku-commands.psm1 from https://github.com/smithcbp/Powershell-Roku-Remote and place into the same folder as roku-remote.ps1"
+if (!(Test-Path .\Roku-remote.psm1)){
+    Write-Error -Message "Please download Roku-commands.psm1 from https://github.com/smithcbp/Powershell-Roku-Remote and place into the same folder as Roku-remote.ps1"
     Return
     }
 
-Import-Module (Resolve-Path('roku-remote.psm1'))
+Import-Module (Resolve-Path('Roku-remote.psm1'))
 
 #region gui events
 
 $UpButton.Add_Click({
-    $selectedroku = $rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Press-Up -ip $selectedroku.ip
+    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
+    Press-Up -ip $SelectedRoku.ip
     })
 
 $DownButton.Add_Click({
-    $selectedroku = $rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Press-Down -ip $selectedroku.ip
+    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
+    Press-Down -ip $SelectedRoku.ip
     })
 
 $RightButton.Add_Click({
-    $selectedroku = $rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Press-Right -ip $selectedroku.ip
+    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
+    Press-Right -ip $SelectedRoku.ip
     })
 
-$selectButton.Add_Click({
-    $selectedroku = $rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Press-Select -ip $selectedroku.ip
+$SelectButton.Add_Click({
+    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
+    Press-Select -ip $SelectedRoku.ip
     })
 
 $LeftButton.Add_Click({
-    $selectedroku = $rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Press-Left -ip $selectedroku.ip
+    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
+    Press-Left -ip $SelectedRoku.ip
     })
 
 $BackButton.Add_Click({    
-    $selectedroku = $rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Press-Back -ip $selectedroku.ip
+    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
+    Press-Back -ip $SelectedRoku.ip
     })
 
 $HomeButton.Add_Click({
-    $selectedroku = $rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Press-Home -ip $selectedroku.ip
+    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
+    Press-Home -ip $SelectedRoku.ip
     })
 
 $InfoButton.Add_Click({
-    $selectedroku = $rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Press-Info -ip $selectedroku.ip
+    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
+    Press-Info -ip $SelectedRoku.ip
     })
 
 $RRButton.Add_Click({
-    $selectedroku = $rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Press-Rev -ip $selectedroku.ip
+    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
+    Press-Rev -ip $SelectedRoku.ip
     })
 
 $PlayButton.Add_Click({
-    $selectedroku = $rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Press-Play -ip $selectedroku.ip
+    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
+    Press-Play -ip $SelectedRoku.ip
     })
 
 $FFButton.Add_Click({
-    $selectedroku = $rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Press-Select -ip $selectedroku.ip
+    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
+    Press-Select -ip $SelectedRoku.ip
     })
 
 $AppsButton.Add_Click({
-    $selectedroku = $rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Launch-Rokuapp -ip $selectedroku.ip
+    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
+    Launch-Rokuapp -ip $SelectedRoku.ip
     })
 
 $RebootButton.Add_Click({
-    $selectedroku = $rokus | Where-Object Description -Like $RokuList.SelectedItem
-    RebootMacro -ip $selectedroku.ip
+    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
+    RebootMacro -ip $SelectedRoku.ip
     })
 
 #endregion
 
-$rokus = Discover-Rokus
-$rokus | ForEach-Object {[void] $RokuList.Items.Add($_.Description)}
-$selectedroku = $rokus | Where-Object Description -Like $RokuList.SelectedItem
-$rokuurl = "http://" + $selectedroku.ip + ":8060"
+$Rokus = Discover-Rokus
+$Rokus | ForEach-Object {[void] $RokuList.Items.Add($_.Description)}
+$SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
+$Rokuurl = "http://" + $SelectedRoku.ip + ":8060"
 
-$result = $Form.ShowDialog()
+$Form.ShowDialog()
 
 
 
