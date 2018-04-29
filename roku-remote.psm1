@@ -6,19 +6,19 @@ Import-Module .\roku-commands.psm1
 
 .NOTES
 
-Discover-Rokus
+Get-LocalRokus
 Ip            Name                          Model                Description
 --            ----                          -----                -----------
 192.168.0.110 Bedroom Roku Stick           Roku Stick 3500X     Bedroom Roku Stick | 192.168.0.110
 192.168.0.111 Roku Express                 Roku Express 3700X   Roku Express  | 192.168.0.111
 
-Press-XXX -ip $Ip
+Send-RokuXXX -ip $Ip
 RebootMacro -ip $Ip
-Launch-RokuApp -ip $Ip
+Open-Rokuapp -ip $Ip
 
 #>
 
-Function Discover-Rokus {
+Function Get-LocalRokus {
 
 $RokuOUIS = @(
     'DC-3A-5E'
@@ -59,91 +59,91 @@ $Rokus = foreach ($Rokuip_Item in $Rokuips) {
 Write-Output $Rokus
 }
 
-Function Press-Home {
+Function Send-RokuHome {
     param([string]$Ip)   
     $RokuUrl = 'http://' + $Ip + ':8060'
     Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/Home" -method Post 
     }
 
-Function Press-Rev {
+Function Send-RokuRev {
     param([string]$Ip)   
     $RokuUrl = 'http://' + $Ip + ':8060'
     Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/Rev" -method Post 
     }
 
-Function Press-Fwd {
+Function Send-RokuFwd {
     param([string]$Ip)   
     $RokuUrl = 'http://' + $Ip + ':8060'
     Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/Fwd" -method Post 
     }
 
-Function Press-Play{
+Function Send-RokuPlay{
     param([string]$Ip)   
     $RokuUrl = 'http://' + $Ip + ':8060'
     Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/Play" -method Post 
     }
 
-Function Press-Select {
+Function Send-RokuSelect {
     param([string]$Ip)   
     $RokuUrl = 'http://' + $Ip + ':8060'
     Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/Select" -method Post 
     }
 
-Function Press-Left {
+Function Send-RokuLeft {
     param([string]$Ip)   
     $RokuUrl = 'http://' + $Ip + ':8060'
     Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/Left" -method Post 
     }
 
-Function Press-Right {
+Function Send-RokuRight {
     param([string]$Ip)   
     $RokuUrl = 'http://' + $Ip + ':8060'
     Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/Right" -method Post 
     }
 
-Function Press-Down {
+Function Send-RokuDown {
     param([string]$Ip)   
     $RokuUrl = 'http://' + $Ip + ':8060'
     Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/Down" -method Post 
     }
 
-Function Press-Up {
+Function Send-RokuUp {
     param([string]$Ip)   
     $RokuUrl = 'http://' + $Ip + ':8060'
     Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/Up" -method Post 
     }
 
-Function Press-Back {
+Function Send-RokuBack {
     param([string]$Ip)   
     $RokuUrl = 'http://' + $Ip + ':8060'
     Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/Back" -method Post 
     }
 
-Function Press-InstantReplay {
+Function Send-RokuInstantReplay {
     param([string]$Ip)   
     $RokuUrl = 'http://' + $Ip + ':8060'
     Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/InstantReplay" -method Post 
     }
 
-Function Press-Info {
+Function Send-RokuInfo {
     param([string]$Ip)   
     $RokuUrl = 'http://' + $Ip + ':8060'
     Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/Info" -method Post 
     }
 
-Function Press-Backspace {
+Function Send-RokuBackspace {
     param([string]$Ip)   
     $RokuUrl = 'http://' + $Ip + ':8060'
     Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/Backspace" -method Post 
     }
 
-Function Press-Search {
+Function Send-RokuSearch {
     param([string]$Ip)   
     $RokuUrl = 'http://' + $Ip + ':8060'
     Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/Search" -method Post 
     }
 
-Function Press-Enter {
+Function Send-RokuEnter {
     param([string]$Ip)   
     $RokuUrl = 'http://' + $Ip + ':8060'
     Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/Enter" -method Post 
@@ -151,42 +151,42 @@ Function Press-Enter {
 
 Function Send-RebootMacro {
     param([string]$Ip)
-    Press-Home $Ip
+    Send-RokuHome $Ip
     Start-Sleep -Seconds 2
-    Press-Home $Ip
+    Send-RokuHome $Ip
     Start-Sleep -Seconds 2
-    Press-Down $Ip
+    Send-RokuDown $Ip
     Start-Sleep -Seconds 1
-    Press-Down $Ip
+    Send-RokuDown $Ip
     Start-Sleep -Seconds 1
-    Press-Down $Ip
+    Send-RokuDown $Ip
     Start-Sleep -Seconds 1
-    Press-Down $Ip
+    Send-RokuDown $Ip
     Start-Sleep -Seconds 1
-    Press-Down $Ip
+    Send-RokuDown $Ip
     Start-Sleep -Seconds 1
-    Press-Down $Ip
+    Send-RokuDown $Ip
     Start-Sleep -Seconds 1
-    Press-Down $Ip
+    Send-RokuDown $Ip
     Start-Sleep -Seconds 1
-    Press-Select $Ip
+    Send-RokuSelect $Ip
     Start-Sleep -Seconds 2
-    Press-Up $Ip
+    Send-RokuUp $Ip
     Start-Sleep -Seconds 1
-    Press-Right $Ip
+    Send-RokuRight $Ip
     Start-Sleep -Seconds 1 
-    Press-Up $Ip
+    Send-RokuUp $Ip
     Start-Sleep -Seconds 1 
-    Press-Up $Ip
+    Send-RokuUp $Ip
     Start-Sleep -Seconds 1
-    Press-Up $Ip
+    Send-RokuUp $Ip
     Start-Sleep -Seconds 1
-    Press-Right $Ip
+    Send-RokuRight $Ip
     Start-Sleep -Seconds 1
-    Press-Select $Ip 
+    Send-RokuSelect $Ip 
     }
 
-Function Launch-RokuApp {
+Function Open-Rokuapp {
     param([string]$Ip)
     
     Add-Type -AssemblyName System.Windows.Forms

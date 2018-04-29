@@ -21,7 +21,7 @@ $Form                            = New-Object System.Windows.Forms.Form
 $Form.clientSize                 = '400,600'
 $Form.text                       = 'Roku Remote'
 $Form.topMost                    = $false
-$Form.backColor                  = 'DarkBlue'
+$Form.backcolor                  = 'DarkBlue'
 
 $UpButton                        = New-Object System.Windows.Forms.Button
 $UpButton.text                   = '▲'
@@ -29,7 +29,7 @@ $UpButton.width                  = 60
 $UpButton.height                 = 60
 $UpButton.location               = New-Object System.Drawing.Point(171,256)
 $UpButton.Font                   = 'Microsoft Sans Serif,16'
-$UpButton.BackColor              = 'Cyan'
+$UpButton.backcolor              = 'Cyan'
 
 $DownButton                      = New-Object System.Windows.Forms.Button
 $DownButton.text                 = '▼'
@@ -37,7 +37,7 @@ $DownButton.width                = 60
 $DownButton.height               = 60
 $DownButton.location             = New-Object System.Drawing.Point(171,387)
 $DownButton.font                 = 'Microsoft Sans Serif,16'
-$DownButton.backColor            = 'Cyan'
+$DownButton.backcolor            = 'Cyan'
 
 $RightButton                     = New-Object System.Windows.Forms.Button
 $RightButton.text                = '►'
@@ -46,7 +46,7 @@ $RightButton.height              = 60
 $RightButton.location            = New-Object System.Drawing.Point(237,321)
 $RightButton.font                = 'Microsoft Sans Serif,30'
 $RightButton.textAlign           = 'MiddleCenter'
-$RightButton.backColor           = 'Cyan'
+$RightButton.backcolor           = 'Cyan'
 
 $SelectButton                    = New-Object System.Windows.Forms.Button
 $SelectButton.text               = 'OK'
@@ -61,7 +61,7 @@ $LeftButton.text                 = '◄'
 $LeftButton.width                = 60
 $LeftButton.height               = 60
 $LeftButton.location             = New-Object System.Drawing.Point(105,321)
-$LeftButton.backColor            = 'Cyan'
+$LeftButton.backcolor            = 'Cyan'
 $LeftButton.font                 = 'Microsoft Sans Serif,30'
 
 
@@ -96,7 +96,7 @@ $RRButton.width                  = 50
 $RRButton.height                 = 50
 $RRButton.location               = New-Object System.Drawing.Point(110,460)
 $RRButton.font                   = 'Microsoft Sans Serif,16'
-$RRButton.backColor              = 'Cyan'
+$RRButton.backcolor              = 'Cyan'
 
 $PlayButton                      = New-Object System.Windows.Forms.Button
 $PlayButton.text                 = '►'
@@ -104,7 +104,7 @@ $PlayButton.width                = 50
 $PlayButton.height               = 50
 $PlayButton.location             = New-Object System.Drawing.Point(176,460)
 $PlayButton.font                 = 'Microsoft Sans Serif,16'
-$PlayButton.backColor            = 'Cyan'
+$PlayButton.backcolor            = 'Cyan'
 
 $FFButton                        = New-Object System.Windows.Forms.Button
 $FFButton.text                   = '»'
@@ -112,7 +112,7 @@ $FFButton.width                  = 50
 $FFButton.height                 = 50
 $FFButton.location               = New-Object System.Drawing.Point(240,460)
 $FFButton.font                   = 'Microsoft Sans Serif,16'
-$FFButton.backColor              = 'Cyan'
+$FFButton.backcolor              = 'Cyan'
 
 $RebootButton                    = New-Object System.Windows.Forms.Button
 $RebootButton.text               = 'Reboot'
@@ -120,7 +120,7 @@ $RebootButton.width              = 100
 $RebootButton.height             = 50
 $RebootButton.location           = New-Object System.Drawing.Point(260,520)
 $RebootButton.font               = 'Microsoft Sans Serif,12'
-$RebootButton.backColor          = 'Cyan'
+$RebootButton.backcolor          = 'Cyan'
 
 $AppsButton                      = New-Object System.Windows.Forms.Button
 $AppsButton.text                 = 'Apps'
@@ -128,7 +128,7 @@ $AppsButton.width                = 100
 $AppsButton.height               = 50
 $AppsButton.location             = New-Object System.Drawing.Point(40,520)
 $AppsButton.font                 = 'Microsoft Sans Serif,12'
-$AppsButton.backColor            = 'Cyan'
+$AppsButton.backcolor            = 'Cyan'
 
 $RokuList                        = New-Object System.Windows.Forms.ListBox
 $RokuList.width                  = 360
@@ -138,11 +138,12 @@ $RokuList.font                   = 'Consolas,14'
 $RokuList.horizontalscrollbar    = $true
 
 $Label1                          = New-Object System.Windows.Forms.Label
-$Label1.text                     = 'Select your Roku'
-$Label1.autoSize                 = $true
+$Label1.text                     = 'Select your Roku:'
+$Label1.textalign                = 'MiddleCenter' 
+$Label1.autosize                 = $true
 $Label1.width                    = 25
 $Label1.height                   = 10
-$Label1.location                 = New-Object System.Drawing.Point(62,10)
+$Label1.location                 = New-Object System.Drawing.Point(20,20)
 $Label1.font                     = 'Consolas,18'
 $Label1.forecolor                = 'Cyan'
 
@@ -161,62 +162,62 @@ Import-Module (Resolve-Path('Roku-remote.psm1'))
 
 $UpButton.Add_Click({
     $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Press-Up -ip $SelectedRoku.ip
+    Send-RokuUp -ip $SelectedRoku.ip
     })
 
 $DownButton.Add_Click({
     $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Press-Down -ip $SelectedRoku.ip
+    Send-RokuDown -ip $SelectedRoku.ip
     })
 
 $RightButton.Add_Click({
     $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Press-Right -ip $SelectedRoku.ip
+    Send-RokuRight -ip $SelectedRoku.ip
     })
 
 $SelectButton.Add_Click({
     $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Press-Select -ip $SelectedRoku.ip
+    Send-RokuSelect -ip $SelectedRoku.ip
     })
 
 $LeftButton.Add_Click({
     $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Press-Left -ip $SelectedRoku.ip
+    Send-RokuLeft -ip $SelectedRoku.ip
     })
 
 $BackButton.Add_Click({    
     $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Press-Back -ip $SelectedRoku.ip
+    Send-RokuBack -ip $SelectedRoku.ip
     })
 
 $HomeButton.Add_Click({
     $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Press-Home -ip $SelectedRoku.ip
+    Send-RokuHome -ip $SelectedRoku.ip
     })
 
 $InfoButton.Add_Click({
     $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Press-Info -ip $SelectedRoku.ip
+    Send-RokuInfo -ip $SelectedRoku.ip
     })
 
 $RRButton.Add_Click({
     $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Press-Rev -ip $SelectedRoku.ip
+    Send-RokuRev -ip $SelectedRoku.ip
     })
 
 $PlayButton.Add_Click({
     $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Press-Play -ip $SelectedRoku.ip
+    Send-RokuPlay -ip $SelectedRoku.ip
     })
 
 $FFButton.Add_Click({
     $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Press-Select -ip $SelectedRoku.ip
+    Send-RokuSelect -ip $SelectedRoku.ip
     })
 
 $AppsButton.Add_Click({
     $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Launch-Rokuapp -ip $SelectedRoku.ip
+    Open-Rokuapp -ip $SelectedRoku.ip
     })
 
 $RebootButton.Add_Click({
@@ -226,7 +227,7 @@ $RebootButton.Add_Click({
 
 #endregion
 
-$Rokus = Discover-Rokus
+$Rokus = Get-LocalRokus
 $Rokus | ForEach-Object {[void] $RokuList.Items.Add($_.Description)}
 $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
 $Rokuurl = 'http://' + $SelectedRoku.ip + ':8060'
