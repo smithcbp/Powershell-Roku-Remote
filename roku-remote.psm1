@@ -12,21 +12,9 @@ Ip            Name                          Model                Description
 192.168.0.110 Bedroom Roku Stick           Roku Stick 3500X     Bedroom Roku Stick | 192.168.0.110
 192.168.0.111 Roku Express                 Roku Express 3700X   Roku Express  | 192.168.0.111
 
-PS C:\Scripts> Press-home 192.168.0.110
-
-StatusCode        : 200
-StatusDescription : OK
-Content           : {}
-RawContent        : HTTP/1.1 200 OK
-                    Content-Length: 0
-                    Server: Roku UPnP/1.0 MiniUPnPd/1.4
-
-
-Headers           : {[Content-Length, 0], [Server, Roku UPnP/1.0 MiniUPnPd/1.4]}
-RawContentLength  : 0
-
-Press-XXX -ip 192.168.0.150
-RebootMacro
+Press-XXX -ip $ip
+RebootMacro -ip $ip
+Launch-RokuApp -ip $ip
 
 #>
 
