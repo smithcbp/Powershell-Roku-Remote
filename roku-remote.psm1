@@ -196,41 +196,41 @@ Function Open-RokuApp {
     
     #region Apps Listbox Gui
     $Form                           = New-Object System.Windows.Forms.Form
-    $Form.Text                      = 'Select an App'
-    $Form.Size                      = New-Object System.Drawing.Size(350,640)
-    $Form.StartPosition             = 'CenterScreen'
-    $Form.BackColor                 = 'DarkBlue'
+    $Form.text                      = 'Select an App'
+    $Form.size                      = New-Object System.Drawing.Size(350,640)
+    $Form.startposition             = 'CenterScreen'
+    $Form.backcolor                 = 'DarkBlue'
 
     $OKButton                       = New-Object System.Windows.Forms.Button
-    $OKButton.Location              = New-Object System.Drawing.Point(75,545)
-    $OKButton.Size                  = New-Object System.Drawing.Size(70,40)
-    $OKButton.Text                  = 'OK'
-    $OKButton.DialogResult          = [System.Windows.Forms.DialogResult]::OK
-    $OKButton.Font                  = 'Microsoft Sans Serif,12'
-    $OKButton.BackColor             = 'Cyan'
-    $Form.AcceptButton              = $OKButton
+    $OKButton.location              = New-Object System.Drawing.Point(75,545)
+    $OKButton.size                  = New-Object System.Drawing.Size(70,40)
+    $OKButton.text                  = 'OK'
+    $OKButton.dialogresult          = [System.Windows.Forms.DialogResult]::OK
+    $OKButton.font                  = 'Microsoft Sans Serif,12'
+    $OKButton.backcolor             = 'Cyan'
+    $Form.acceptbutton              = $OKButton
 
     $CancelButton                   = New-Object System.Windows.Forms.Button
-    $CancelButton.Location          = New-Object System.Drawing.Point(190,545)
-    $CancelButton.Size              = New-Object System.Drawing.Size(70,40)
-    $CancelButton.Text              = 'Cancel'
-    $CancelButton.DialogResult      = [System.Windows.Forms.DialogResult]::Cancel
-    $CancelButton.Font              = 'Microsoft Sans Serif,10'
-    $CancelButton.BackColor         = 'Cyan'
-    $Form.CancelButton              = $CancelButton
+    $CancelButton.location          = New-Object System.Drawing.Point(190,545)
+    $CancelButton.size              = New-Object System.Drawing.Size(70,40)
+    $CancelButton.text              = 'Cancel'
+    $CancelButton.dialogResult      = [System.Windows.Forms.DialogResult]::Cancel
+    $CancelButton.font              = 'Microsoft Sans Serif,10'
+    $CancelButton.backColor         = 'Cyan'
+    $Form.cancelbutton              = $CancelButton
 
     $Label                          = New-Object System.Windows.Forms.Label
-    $Label.Location                 = New-Object System.Drawing.Point(10,15)
-    $Label.Size                     = New-Object System.Drawing.Size(280,20)
-    $Label.Text                     = 'PLEASE SELECT AN APP:'
-    $Label.Font                     = 'Consolas,12'
-    $Label.ForeColor                = 'Cyan'
+    $Label.location                 = New-Object System.Drawing.Point(10,15)
+    $Label.size                     = New-Object System.Drawing.Size(280,20)
+    $Label.text                     = 'PLEASE SELECT AN APP:'
+    $Label.font                     = 'Consolas,12'
+    $Label.forecolor                = 'Cyan'
     
     $Listbox                        = New-Object System.Windows.Forms.ListBox
-    $Listbox.Location               = New-Object System.Drawing.Point(10,40)
-    $Listbox.Size                   = New-Object System.Drawing.Size(313,20)
-    $Listbox.Height                 = 500
-    $Listbox.Font                   = New-Object System.Drawing.Font('Comic Sans MS',16,[System.Drawing.FontStyle]::Bold)
+    $Listbox.location               = New-Object System.Drawing.Point(10,40)
+    $Listbox.size                   = New-Object System.Drawing.Size(313,20)
+    $Listbox.height                 = 500
+    $Listbox.font                   = New-Object System.Drawing.Font('Comic Sans MS',16,[System.Drawing.FontStyle]::Bold)
 
     $Form.Controls.AddRange(@($Label,$CancelButton,$OKButton,$Listbox))
 
