@@ -162,57 +162,57 @@ Import-Module (Resolve-Path('Roku-remote.psm1'))
 
 $UpButton.Add_Click({
     $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Send-RokuUp -ip $SelectedRoku.ip
+    Send-RokuCommand -ip $SelectedRoku.ip -RokuCommand 'Up'
     })
 
 $DownButton.Add_Click({
     $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Send-RokuDown -ip $SelectedRoku.ip
+    Send-RokuCommand -ip $SelectedRoku.ip -RokuCommand 'Down'
     })
 
 $RightButton.Add_Click({
     $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Send-RokuRight -ip $SelectedRoku.ip
+    Send-RokuCommand -ip $SelectedRoku.ip -RokuCommand 'Right'
     })
 
 $SelectButton.Add_Click({
     $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Send-RokuSelect -ip $SelectedRoku.ip
+    Send-RokuCommand -ip $SelectedRoku.ip -RokuCommand 'Select'
     })
 
 $LeftButton.Add_Click({
     $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Send-RokuLeft -ip $SelectedRoku.ip
+    Send-RokuCommand -ip $SelectedRoku.ip -RokuCommand 'Left'
     })
 
 $BackButton.Add_Click({    
     $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Send-RokuBack -ip $SelectedRoku.ip
+    Send-RokuCommand -ip $SelectedRoku.ip -RokuCommand 'Back'
     })
 
 $HomeButton.Add_Click({
     $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Send-RokuHome -ip $SelectedRoku.ip
+    Send-RokuCommand -ip $SelectedRoku.ip -RokuCommand 'Home'
     })
 
 $InfoButton.Add_Click({
     $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Send-RokuInfo -ip $SelectedRoku.ip
+    Send-RokuCommand -ip $SelectedRoku.ip -RokuCommand 'Info'
     })
 
 $RRButton.Add_Click({
     $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Send-RokuRev -ip $SelectedRoku.ip
+    Send-RokuCommand -ip $SelectedRoku.ip -RokuCommand 'Rev'
     })
 
 $PlayButton.Add_Click({
     $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Send-RokuPlay -ip $SelectedRoku.ip
+    Send-RokuCommand -ip $SelectedRoku.ip -RokuCommand 'Play'
     })
 
 $FFButton.Add_Click({
     $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Send-RokuSelect -ip $SelectedRoku.ip
+    Send-RokuSelect -ip $SelectedRoku.ip -RokuCommand 'Fwd'
     })
 
 $AppsButton.Add_Click({

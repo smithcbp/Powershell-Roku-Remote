@@ -59,131 +59,55 @@ $Rokus = foreach ($RokuIp_Item in $RokuIps) {
 Write-Output $Rokus
 }
 
-Function Send-RokuHome {
-    param([string]$Ip)   
+Function Send-RokuCommand {
+    param(       
+        [Parameter(Mandatory)]  
+        [ValidateSet('Home','Rev','Fwd','Play','Select','Left','Right','Down','Up','Back','InstandReplay','Info','Backspace','Search','Enter')]
+        [string]
+        $RokuCommand,
+        [Parameter(Mandatory)] 
+        [string]
+        $Ip
+        )
     $RokuUrl = 'http://' + $Ip + ':8060'
-    Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/Home" -method Post 
-    }
-
-Function Send-RokuRev {
-    param([string]$Ip)   
-    $RokuUrl = 'http://' + $Ip + ':8060'
-    Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/Rev" -method Post 
-    }
-
-Function Send-RokuFwd {
-    param([string]$Ip)   
-    $RokuUrl = 'http://' + $Ip + ':8060'
-    Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/Fwd" -method Post 
-    }
-
-Function Send-RokuPlay{
-    param([string]$Ip)   
-    $RokuUrl = 'http://' + $Ip + ':8060'
-    Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/Play" -method Post 
-    }
-
-Function Send-RokuSelect {
-    param([string]$Ip)   
-    $RokuUrl = 'http://' + $Ip + ':8060'
-    Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/Select" -method Post 
-    }
-
-Function Send-RokuLeft {
-    param([string]$Ip)   
-    $RokuUrl = 'http://' + $Ip + ':8060'
-    Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/Left" -method Post 
-    }
-
-Function Send-RokuRight {
-    param([string]$Ip)   
-    $RokuUrl = 'http://' + $Ip + ':8060'
-    Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/Right" -method Post 
-    }
-
-Function Send-RokuDown {
-    param([string]$Ip)   
-    $RokuUrl = 'http://' + $Ip + ':8060'
-    Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/Down" -method Post 
-    }
-
-Function Send-RokuUp {
-    param([string]$Ip)   
-    $RokuUrl = 'http://' + $Ip + ':8060'
-    Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/Up" -method Post 
-    }
-
-Function Send-RokuBack {
-    param([string]$Ip)   
-    $RokuUrl = 'http://' + $Ip + ':8060'
-    Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/Back" -method Post 
-    }
-
-Function Send-RokuInstantReplay {
-    param([string]$Ip)   
-    $RokuUrl = 'http://' + $Ip + ':8060'
-    Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/InstantReplay" -method Post 
-    }
-
-Function Send-RokuInfo {
-    param([string]$Ip)   
-    $RokuUrl = 'http://' + $Ip + ':8060'
-    Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/Info" -method Post 
-    }
-
-Function Send-RokuBackspace {
-    param([string]$Ip)   
-    $RokuUrl = 'http://' + $Ip + ':8060'
-    Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/Backspace" -method Post 
-    }
-
-Function Send-RokuSearch {
-    param([string]$Ip)   
-    $RokuUrl = 'http://' + $Ip + ':8060'
-    Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/Search" -method Post 
-    }
-
-Function Send-RokuEnter {
-    param([string]$Ip)   
-    $RokuUrl = 'http://' + $Ip + ':8060'
-    Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/Enter" -method Post 
-    }
+    Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/$RokuCommand" -method Post 
+}
 
 Function Send-RokuRebootMacro {
     param([string]$Ip)
-    Send-RokuHome $Ip
+    Send-RokuCommand -ip $Ip -RokuCommand 'Home'
     Start-Sleep -Seconds 2
-    Send-RokuHome $Ip
+    Send-RokuCommand -ip $Ip -RokuCommand 'Home'
     Start-Sleep -Seconds 2
-    Send-RokuDown $Ip
+    Send-RokuCommand -ip $Ip -RokuCommand 'Down'
     Start-Sleep -Seconds 1
-    Send-RokuDown $Ip
+    Send-RokuCommand -ip $Ip -RokuCommand 'Down'
     Start-Sleep -Seconds 1
-    Send-RokuDown $Ip
+    Send-RokuCommand -ip $Ip -RokuCommand 'Down'
     Start-Sleep -Seconds 1
-    Send-RokuDown $Ip
+    Send-RokuCommand -ip $Ip -RokuCommand 'Down'
     Start-Sleep -Seconds 1
-    Send-RokuDown $Ip
+    Send-RokuCommand -ip $Ip -RokuCommand 'Down'
     Start-Sleep -Seconds 1
-    Send-RokuDown $Ip
+    Send-RokuCommand -ip $Ip -RokuCommand 'Down'
     Start-Sleep -Seconds 1
-    Send-RokuDown $Ip
+    Send-RokuCommand -ip $Ip -RokuCommand 'Down'
     Start-Sleep -Seconds 1
-    Send-RokuSelect $Ip
+    Send-RokuCommand -ip $Ip -RokuCommand 'Select'
     Start-Sleep -Seconds 2
-    Send-RokuUp $Ip
+    Send-RokuCommand -ip $Ip -RokuCommand 'Up'
     Start-Sleep -Seconds 1
-    Send-RokuRight $Ip
+    Send-RokuCommand -ip $Ip -RokuCommand 'Right'
     Start-Sleep -Seconds 1 
-    Send-RokuUp $Ip
+    Send-RokuCommand -ip $Ip -RokuCommand 'Up'
     Start-Sleep -Seconds 1 
-    Send-RokuUp $Ip
+    Send-RokuCommand -ip $Ip -RokuCommand 'Up'
     Start-Sleep -Seconds 1
-    Send-RokuUp $Ip
+    Send-RokuCommand -ip $Ip -RokuCommand 'Up'
     Start-Sleep -Seconds 1
-    Send-RokuRight $Ip
+    Send-RokuCommand -ip $Ip -RokuCommand 'Right'
     Start-Sleep -Seconds 1
-    Send-RokuSelect $Ip 
+    Send-RokuCommand -ip $Ip -RokuCommand 'Select' 
     }
 
 Function Open-RokuApp {
@@ -191,7 +115,7 @@ Function Open-RokuApp {
     
 #region WPF Form App Selection List
 
-    <Add-Type -AssemblyName System.Windows.Forms
+    Add-Type -AssemblyName System.Windows.Forms
     [System.Windows.Forms.Application]::EnableVisualStyles()
     Add-Type -AssemblyName System.Drawing
     Add-Type -AssemblyName PresentationFramework
