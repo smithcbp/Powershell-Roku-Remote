@@ -1,33 +1,11 @@
 roku-remote.psm1
+A collection of Roku remote functions.
 
-.NAME
-    roku-remote.psm1
-.SYNOPSIS
-
-A collection of functions for discovering and controlling local Roku devices.
-Import-Module .\roku-commands.psm1
-
-.EXAMPLE
-
-PS C:\Scripts> Discover-Rokus
-Ip            Name                          Model                Description
---            ----                          -----                -----------
-192.168.0.110 Bedroom Roku Stick           Roku Stick 3500X     Bedroom Roku Stick | 192.168.0.110
-192.168.0.111 Roku Express                 Roku Express 3700X   Roku Express  | 192.168.0.111
-
-PS C:\Scripts> Press-home 192.168.0.110
-
+Discover-Rokus searches then outputs the Name, IP, and Model of the Rokus on the local network.
+Press-XXX $ip will invoke the command on the specified Roku.
+Launch-App $ip will open a GUI to select an app to launch on the specified Roku
+RebootMacro $ip will simulate all the button presses to reboot the specified Roku
 
 roku-remotegui.ps1
+Launch a WPF GUI Roku remote.
 
-.NAME
-    Roku-RemoteGui.ps1
-.SYNOPSIS
-    Powershell and WPF based Roku Remote that automatically finds Rokus on the local network.
-.SYNTAX
-    Just run the script to launch the GUI
-.DESCRIPTRION
-   Powershell and WPF based Roku Remote that automatically finds Rokus on the local network.
-.REMARKS
-    Thank you to POSHGUI.com for help with the GUI
-#>
