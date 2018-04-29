@@ -4,7 +4,7 @@
 A collection of functions for discovering and controlling local Roku devices.
 Import-Module .\roku-commands.psm1
 
-.Notes
+.NOTES
 
 Discover-Rokus
 Ip            Name                          Model                Description
@@ -139,37 +139,37 @@ Function Press-Enter {
 Function RebootMacro {
     param([string]$Ip)
     Press-Home $Ip
-    sleep -s 2
+    Start-Sleep -Seconds 2
     Press-Home $Ip
-    sleep -s 2
+    Start-Sleep -Seconds 2
     Press-Down $Ip
-    sleep -s 1
+    Start-Sleep -Seconds 1
     Press-Down $Ip
-    sleep -s 1
+    Start-Sleep -Seconds 1
     Press-Down $Ip
-    sleep -s 1
+    Start-Sleep -Seconds 1
     Press-Down $Ip
-    sleep -s 1
+    Start-Sleep -Seconds 1
     Press-Down $Ip
-    sleep -s 1
+    Start-Sleep -Seconds 1
     Press-Down $Ip
-    sleep -s 1
+    Start-Sleep -Seconds 1
     Press-Down $Ip
-    sleep -s 1
+    Start-Sleep -Seconds 1
     Press-Select $Ip
-    sleep -s 2
+    Start-Sleep -Seconds 2
     Press-Up $Ip
-    sleep -s 1
+    Start-Sleep -Seconds 1
     Press-Right $Ip
-    sleep -s 1 
+    Start-Sleep -Seconds 1 
     Press-Up $Ip
-    sleep -s 1 
+    Start-Sleep -Seconds 1 
     Press-Up $Ip
-    sleep -s 1
+    Start-Sleep -Seconds 1
     Press-Up $Ip
-    sleep -s 1
+    Start-Sleep -Seconds 1
     Press-Right $Ip
-    sleep -s 1
+    Start-Sleep -Seconds 1
     Press-Select $Ip 
     }
 
@@ -220,8 +220,6 @@ Function Launch-RokuApp {
     $Listbox.Font                   = New-Object System.Drawing.Font("Comic Sans MS",16,[System.Drawing.FontStyle]::Bold)
 
     $Form.Controls.AddRange(@($Label,$CancelButton,$OKButton,$Listbox))
-
-
 
     #endregion
 
