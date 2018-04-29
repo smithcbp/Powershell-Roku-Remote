@@ -217,12 +217,12 @@ $FFButton.Add_Click({
 
 $AppsButton.Add_Click({
     $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Open-Rokuapp -ip $SelectedRoku.ip
+    Open-RokuApp -ip $SelectedRoku.ip
     })
 
 $RebootButton.Add_Click({
     $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Send-RebootMacro -ip $SelectedRoku.ip
+    Send-RokuRebootMacro -ip $SelectedRoku.ip
     })
 
 #endregion

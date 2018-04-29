@@ -14,7 +14,7 @@ Ip            Name                          Model                Description
 
 Send-RokuXXX -ip $Ip
 RebootMacro -ip $Ip
-Open-Rokuapp -ip $Ip
+Open-RokuApp -ip $Ip
 
 #>
 
@@ -34,26 +34,26 @@ $RokuOUIS = @(
     '08-05-81'
     '00-0D-4B'
     )
-$Rokuips = @()
+$RokuIps = @()
 $Rokus = @()
 
 foreach($Oui in $RokuOUIS) {
-    $RokuIps += Get-NetNeighbor -LinkLayerAddress $oui*
+    $RokuIps += Get-NetNeighbor -LinkLayerAddress $Oui*
     }
 
-$Rokus = foreach ($Rokuip_Item in $Rokuips) {
-    $Ip = $Rokuip_Item.IPAddress | Out-String
+$Rokus = foreach ($RokuIp_Item in $RokuIps) {
+    $Ip = $RokuIp_Item.IPAddress | Out-String
     $Ip = $Ip.Trim()
     $Uri = 'http://' + $Ip + ':8060'
     $Rokuweb = (Invoke-WebRequest -UseBasicParsing $Uri)
-    [xml]$Rokuxml = $Rokuweb.Content
-    $Rokuname = $Rokuxml.root.device.friendlyName
-    $Rokumodel = $Rokuxml.root.device.modelname + ' ' + $Rokuxml.root.device.modelnumber
+    [xml]$RokuXML = $Rokuweb.Content
+    $RokuName = $RokuXML.root.device.friendlyName
+    $RokuModes = $RokuXML.root.device.modelname + ' ' + $RokuXML.root.device.modelnumber
     [pscustomobject]@{
         Ip = $Ip
-        Name = $Rokuname
-        Model = $Rokumodel
-        Description = $Rokuname + ' | ' + $Ip
+        Name = $RokuName
+        Model = $RokuModes
+        Description = $RokuName + ' | ' + $Ip
         }
     }
 Write-Output $Rokus
@@ -149,7 +149,7 @@ Function Send-RokuEnter {
     Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/Enter" -method Post 
     }
 
-Function Send-RebootMacro {
+Function Send-RokuRebootMacro {
     param([string]$Ip)
     Send-RokuHome $Ip
     Start-Sleep -Seconds 2
@@ -186,7 +186,7 @@ Function Send-RebootMacro {
     Send-RokuSelect $Ip 
     }
 
-Function Open-Rokuapp {
+Function Open-RokuApp {
     param([string]$Ip)
     
     Add-Type -AssemblyName System.Windows.Forms
