@@ -24,12 +24,12 @@ $Rokuouis = "DC-3A-5E","D0-4D-2C","CC-6D-A0","C8-3A-6B","B8-A1-75","B8-3E-59","B
 $Rokuips = @()
 $Rokus = @()
 
-foreach($oui in $Rokuouis) {
-    $Rokuips += Get-NetNeighbor -LinkLayerAddress $oui*
+foreach($Oui in $RokuOuis) {
+    $RokuIps += Get-NetNeighbor -LinkLayerAddress $oui*
     }
 
-$Rokus = foreach ($Rokuip in $Rokuips) {
-    $Ip = $Rokuip.IPAddress | Out-String
+$Rokus = foreach ($Rokuip_Item in $Rokuips) {
+    $Ip = $Rokuip_Item.IPAddress | Out-String
     $Ip = $Ip.Trim()
     $Uri = "http://" + $Ip + ":8060"
     $Rokuweb = (Invoke-WebRequest -UseBasicParsing $Uri)
@@ -233,11 +233,12 @@ Function Launch-RokuApp {
     }
 
     $Form.Topmost = $true
-    $Form.ShowDialog()
-
-    $SelectedApp = $Listbox.SelectedItem
-    $App = $Apps | Where-Object "#text" -Like $SelectedApp
-    $AppId = $App.id | Out-String
-    Invoke-WebRequest -Uri "$RokuUrl/launch/$Appid" -method Post
-
+    $Result = $Form.ShowDialog()
+    if ($Result -eq "Cancel"){Return}
+    if ($Result -eq "OK"){
+        $SelectedApp = $Listbox.SelectedItem
+        $App = $Apps | Where-Object "#text" -Like $SelectedApp
+        $AppId = $App.id | Out-String
+        Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/launch/$Appid" -method Post
+        }
 }
