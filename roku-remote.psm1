@@ -189,7 +189,9 @@ Function Send-RokuRebootMacro {
 Function Open-RokuApp {
     param([string]$Ip)
     
-    Add-Type -AssemblyName System.Windows.Forms
+#region WPF Form App Selection List
+
+    <Add-Type -AssemblyName System.Windows.Forms
     [System.Windows.Forms.Application]::EnableVisualStyles()
     Add-Type -AssemblyName System.Drawing
     Add-Type -AssemblyName PresentationFramework
@@ -255,3 +257,19 @@ Function Open-RokuApp {
         Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/launch/$Appid" -method Post
         }
 }
+
+#endregion
+
+#region Out-Gridview App Selection List.
+<#
+    #Select App
+    $RokuUrl = 'http://' + $Ip + ':8060'
+    $AppsWeb = Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/query/apps" -method Get
+    [xml]$Appsxml = $AppsWeb.Content
+    $Apps = $Appsxml.apps.app | select "#text",id | sort "#text" 
+    $App = $Apps | Out-GridView -PassThru
+    $AppId = $App.id | Out-String
+    Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/launch/$Appid" -method Post
+    }
+#>
+#endregion
