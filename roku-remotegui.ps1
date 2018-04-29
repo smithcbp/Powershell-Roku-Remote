@@ -152,7 +152,7 @@ $Form.controls.AddRange(@($UpButton,$DownButton,$RightButton,$SelectButton,$Left
 #endregion
 
 if (!(Test-Path .\Roku-remote.psm1)){
-    Write-Error -Message 'Please download Roku-commands.psm1 from https://github.com/smithcbp/Powershell-Roku-Remote and place into the same folder as Roku-remote.ps1'
+    Write-Error -Message 'Please download Roku-Remote.psm1 from https://github.com/smithcbp/Powershell-Roku-Remote and place into the same folder as Roku-remote.ps1'
     Return
     }
 
