@@ -1,7 +1,7 @@
 ﻿<#
 .SYNOPSIS
 
-A collection of functions for discovering and controlling local Roku devices.
+A collection of Functions for discovering and controlling local Roku devices.
 Import-Module .\roku-commands.psm1
 
 .NOTES
@@ -62,7 +62,7 @@ Write-Output $Rokus
 Function Send-RokuCommand {
     param(       
         [Parameter(Mandatory)]  
-        [ValidateSet('Home','Rev','Fwd','Play','Select','Left','Right','Down','Up','Back','InstandReplay','Info','Backspace','Search','Enter')]
+        [ValidateSet('Home','Rev','Fwd','Play','Select','Left','Right','Down','Up','Back','InstandReplay','Info','Backspace','Search','Enter','FindRemote')]
         [string]
         $RokuCommand,
         [Parameter(Mandatory)] 
@@ -71,9 +71,10 @@ Function Send-RokuCommand {
         )
     $RokuUrl = 'http://' + $Ip + ':8060'
     Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/$RokuCommand" -method Post 
+
 }
 
-Function Send-RokuRebootMacro {
+Function Send-RokuReboot {
     param(
     [Parameter(Mandatory)] 
     [string]
@@ -205,3 +206,149 @@ Function Open-RokuApp {
     }
 #>
 #endregion
+
+#Hidden Menus (some might work) Based off of https://lifehacker.com/all-the-roku-secret-commands-and-menus-in-one-graphic-1779010902
+
+Function Send-RokuSecretMenu1 {
+        param(
+    [Parameter(Mandatory)] 
+    [string]
+    $Ip
+    )
+    Send-RokuCommand -ip $Ip -RokuCommand 'Home'
+    Start-Sleep -Seconds 3
+    Send-RokuCommand -ip $Ip -RokuCommand 'Home'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Home'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Home'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Home'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Home'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Fwd'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Fwd'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Fwd'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Rev'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Rev'
+    
+    }
+
+Function Send-RokuSecretMenu2 {
+        param(
+    [Parameter(Mandatory)] 
+    [string]
+    $Ip
+    )
+    Send-RokuCommand -ip $Ip -RokuCommand 'Home'
+    Start-Sleep -Seconds 3
+    Send-RokuCommand -ip $Ip -RokuCommand 'Home'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Home'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Home'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Home'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Home'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Up'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Right'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Down'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Left'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Up'
+    
+    }
+
+Function Send-RokuWifiMenu {
+        param(
+    [Parameter(Mandatory)] 
+    [string]
+    $Ip
+    )
+    Send-RokuCommand -ip $Ip -RokuCommand 'Home'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Home'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Home'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Home'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Home'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Up'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Down'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Up'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Down'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Up'
+    
+    }
+
+Function Send-PlatformMenu {
+        param(
+    [Parameter(Mandatory)] 
+    [string]
+    $Ip
+    )
+    Send-RokuCommand -ip $Ip -RokuCommand 'Home'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Home'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Home'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Home'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Home'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Fwd'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Play'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Rew'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Play'
+    Start-Sleep -Seconds 1
+    Send-RokuCommand -ip $Ip -RokuCommand 'Fw'
+    
+    }
+
+Function Send-DeveloperMenu {
+        param(
+    [Parameter(Mandatory)] 
+    [string]
+    $Ip
+    )
+    Send-RokuCommand -ip $Ip -RokuCommand 'Home'
+    Start-Sleep -Milliseconds 700
+    Send-RokuCommand -ip $Ip -RokuCommand 'Home'
+    Start-Sleep -Milliseconds 700
+    Send-RokuCommand -ip $Ip -RokuCommand 'Home'
+    Start-Sleep -Milliseconds 700
+    Send-RokuCommand -ip $Ip -RokuCommand 'Up'
+    Start-Sleep -Milliseconds 700
+    Send-RokuCommand -ip $Ip -RokuCommand 'Up'
+    Start-Sleep -Milliseconds 700
+    Send-RokuCommand -ip $Ip -RokuCommand 'Right'
+    Start-Sleep -Milliseconds 700
+    Send-RokuCommand -ip $Ip -RokuCommand 'Left'
+    Start-Sleep -Milliseconds 700
+    Send-RokuCommand -ip $Ip -RokuCommand 'Right'
+    Start-Sleep -Milliseconds 700
+    Send-RokuCommand -ip $Ip -RokuCommand 'Left'
+    Start-Sleep -Milliseconds 700
+    Send-RokuCommand -ip $Ip -RokuCommand 'Right'
+    
+    }
