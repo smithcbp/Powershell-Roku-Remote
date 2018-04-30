@@ -1,20 +1,30 @@
-~~~~~~~~~~~~~~~~~
+
 roku-remote.psm1
-~~~~~~~~~~~~~~~~~
+
 
 A collection of Roku remote functions.
 
-Discover-Rokus searches then outputs the Name, IP, and Model of the Rokus on the local network.
+Get-LocalRokus 
 
-Press-XXX $ip will invoke the command on the specified Roku.
+	Search the local network for Roku compatible devices and outputs the Name, IP, and Model.
 
-Launch-App $ip will open a GUI to select an app to launch on the specified Roku
+Send-RokuCommand 
+	
+	Send-RokuCommand -ip $ip -RokuCommand ('Home','Rev','Fwd','Play','Select','Left','Right','Down','Up','Back','InstandReplay','Info','Backspace','Search','Enter','FindRemote')
 
-RebootMacro $ip will simulate all the button presses to reboot the specified Roku
+Launch-App $ip
+
+	Opens a GUI to select an app that will launch on the specified Roku
+
+Send-RokuReboot $ip 
+
+	Simulate the button presses to reboot the specified Roku
+	
 
 
-~~~~~~~~~~~~~~~~~~~
+
+
 roku-remotegui.ps1
-~~~~~~~~~~~~~~~~~~~
+
 Launch a WPF GUI Roku remote.
 
