@@ -123,6 +123,8 @@ Function Open-RokuApp {
     )
     
 #region WPF Form App Selection List
+    
+    $RokuName = Get-LocalRokus | Where-Object ip -Like "$ip" | select -ExpandProperty name
 
     Add-Type -AssemblyName System.Windows.Forms
     [System.Windows.Forms.Application]::EnableVisualStyles()
@@ -134,7 +136,9 @@ Function Open-RokuApp {
     $Form.text                      = 'Select an App'
     $Form.size                      = New-Object System.Drawing.Size(350,640)
     $Form.startposition             = 'CenterScreen'
-    $Form.backcolor                 = 'DarkBlue'
+    $Form.backcolor                 = 'Black'
+    $Form.FormBorderStyle           = 'FixedSingle'
+    $Form.MaximizeBox                = $false
 
     $OKButton                       = New-Object System.Windows.Forms.Button
     $OKButton.location              = New-Object System.Drawing.Point(75,545)
@@ -142,7 +146,8 @@ Function Open-RokuApp {
     $OKButton.text                  = 'OK'
     $OKButton.dialogresult          = [System.Windows.Forms.DialogResult]::OK
     $OKButton.font                  = 'Microsoft Sans Serif,12'
-    $OKButton.backcolor             = 'Cyan'
+    $OKButton.forecolor             = 'Cyan'
+    $OKButton.backcolor             = 'Blue'
     $Form.acceptbutton              = $OKButton
 
     $CancelButton                   = New-Object System.Windows.Forms.Button
@@ -150,24 +155,34 @@ Function Open-RokuApp {
     $CancelButton.size              = New-Object System.Drawing.Size(70,40)
     $CancelButton.text              = 'Cancel'
     $CancelButton.dialogResult      = [System.Windows.Forms.DialogResult]::Cancel
-    $CancelButton.font              = 'Microsoft Sans Serif,10'
-    $CancelButton.backColor         = 'Cyan'
+    $CancelButton.font              = 'Microsoft Sans Serif,11'
+    $CancelButton.foreColor         = 'Cyan'
+    $CancelButton.backcolor         = 'Blue'
     $Form.cancelbutton              = $CancelButton
 
     $Label                          = New-Object System.Windows.Forms.Label
     $Label.location                 = New-Object System.Drawing.Point(10,15)
     $Label.size                     = New-Object System.Drawing.Size(280,20)
-    $Label.text                     = 'PLEASE SELECT AN APP:'
+    $Label.text                     = 'Launch which app on:'
     $Label.font                     = 'Consolas,12'
     $Label.forecolor                = 'Cyan'
     
-    $Listbox                        = New-Object System.Windows.Forms.ListBox
-    $Listbox.location               = New-Object System.Drawing.Point(10,40)
-    $Listbox.size                   = New-Object System.Drawing.Size(313,20)
-    $Listbox.height                 = 500
-    $Listbox.font                   = New-Object System.Drawing.Font('Consolas','14',[System.Drawing.FontStyle]::Bold)
+    $Label2                          = New-Object System.Windows.Forms.Label
+    $Label2.location                 = New-Object System.Drawing.Point(10,35)
+    $Label2.size                     = New-Object System.Drawing.Size(280,20)
+    $Label2.text                     = "$RokuName"
+    $Label2.font                     = 'Consolas,12'
+    $Label2.forecolor                = 'Cyan'
 
-    $Form.Controls.AddRange(@($Label,$CancelButton,$OKButton,$Listbox))
+    $Listbox                        = New-Object System.Windows.Forms.ListBox
+    $Listbox.location               = New-Object System.Drawing.Point(10,60)
+    $Listbox.size                   = New-Object System.Drawing.Size(293,20)
+    $Listbox.height                 = 480
+    $Listbox.font                   = New-Object System.Drawing.Font('Consolas','14',[System.Drawing.FontStyle]::Bold)
+    $Listbox.BackColor              = 'Black'
+    $Listbox.ForeColor              = 'Cyan'
+
+    $Form.Controls.AddRange(@($Label,$Label2,$CancelButton,$OKButton,$Listbox))
 
     #endregion
 
