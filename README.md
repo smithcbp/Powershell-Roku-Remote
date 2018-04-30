@@ -1,5 +1,10 @@
+Powershell Roku Remote
+======================
 
-roku-remote.psm1
+	Powershell based Roku GUI remote and module
+
+roku-remote.psm1 
+------------------
 
 	A collection of Roku remote functions.
 
