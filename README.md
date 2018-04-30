@@ -1,8 +1,7 @@
 
 roku-remote.psm1
-________________
 
-A collection of Roku remote functions.
+	A collection of Roku remote functions.
 
 Get-LocalRokus 
 
@@ -20,12 +19,10 @@ Send-RokuReboot $ip
 
 	Simulate the button presses to reboot the specified Roku
 	
-`n`n`n
 
 
 
 roku-remotegui.ps1
-_____________________
 
-Launch a WPF GUI Roku remote.
+	Launch a WPF GUI Roku remote.
 
