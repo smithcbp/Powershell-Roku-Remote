@@ -8,6 +8,7 @@
 .NOTES
     Just run the script to launch the GUI
     Thank you to POSHGUI.com for help with the GUI
+    Roku API https://sdkdocs.roku.com/display/sdkdoc/External+Control+API
 #>
 
 Add-Type -AssemblyName System.Windows.Forms
@@ -242,22 +243,25 @@ $FFButton.Add_Click({
 
 $AppsButton.Add_Click({
     $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Open-RokuApp -ip $SelectedRoku.ip
+    Start-Job -ArgumentList $SelectedRoku.ip -ScriptBlock {
+        Import-Module C:\Scripts\roku-remote\Roku-Remote.psm1
+        Select-RokuApp -ip $args[0] 
+        } 
     })
 
 $RebootButton.Add_Click({
     $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Start-Job -ScriptBlock {
+    Start-Job -ArgumentList $SelectedRoku.ip -ScriptBlock {
         Import-Module C:\Scripts\roku-remote\Roku-Remote.psm1
-        Send-RokuReboot -ip $args[0] } -ArgumentList $SelectedRoku.ip
-        })
+        Send-RokuReboot -ip $args[0] 
+        } 
+    })
 
 #endregion
 
 $Rokus = Get-LocalRokus
 $Rokus | ForEach-Object {[void] $RokuList.Items.Add($_.Description)}
 $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-$Rokuurl = 'http://' + $SelectedRoku.ip + ':8060'
 
 $Form.ShowDialog()
 

@@ -13,8 +13,22 @@ Ip            Name                          Model                Description
 192.168.0.111 Roku Express                 Roku Express 3700X   Roku Express  | 192.168.0.111
 
 Send-RokuCommand -ip $IP -rokucommand 'Home'
-RebootMacro -ip $Ip
-Open-RokuApp -ip $Ip
+    Sends the specified command to the specified roku
+
+Send-RokuReboot -ip $IP
+    Sends a command macro to the Roku navigating to "Restart System"
+
+Get-RokuApp -ip $IP 
+    Outputs all of the installed Roku apps and their corresponding IDs.
+
+Send-RokuApp -Ip $IP ((-name "Netflix") or (-ID "12"))
+    Launches the specified app.
+
+Select-RokuApp -Ip $IP
+    Launches a gui to select and launch a roku app.
+
+
+Roku API https://sdkdocs.roku.com/display/sdkdoc/External+Control+API
 
 #>
 
@@ -64,14 +78,23 @@ Function Send-RokuCommand {
         [Parameter(Mandatory)]  
         [ValidateSet('Home','Rev','Fwd','Play','Select','Left','Right','Down','Up','Back','InstandReplay','Info','Backspace','Search','Enter','FindRemote')]
         [string]
-        $RokuCommand,
+        $RokuCommand, 
+        [switch]
+        $updown,
         [Parameter(Mandatory)] 
         [string]
         $Ip
         )
     $RokuUrl = 'http://' + $Ip + ':8060'
-    Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/$RokuCommand" -method Post 
-
+    
+    if ($updown){
+        Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keydown/$RokuCommand" -method Post
+        Start-Sleep -Milliseconds 100
+        Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keyup/$RokuCommand" -method Post 
+        }
+    else {
+        Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/$RokuCommand" -method Post
+        }
 }
 
 Function Send-RokuReboot {
@@ -115,13 +138,44 @@ Function Send-RokuReboot {
     Send-RokuCommand -ip $Ip -RokuCommand 'Select' 
     }
 
-Function Open-RokuApp {
+Function Get-RokuApps {
     param(
     [Parameter(Mandatory)] 
     [string]
     $Ip
     )
-    
+    $RokuUrl = 'http://' + $Ip + ':8060'
+    $AppsWeb = Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/query/apps" -method Get
+    [xml]$Appsxml = $AppsWeb.Content
+    Write-Output $Appsxml.apps.app
+}
+
+Function Send-RokuApp {
+    param(
+    [Parameter(Mandatory)] 
+    [string]
+    $Ip,
+    [string]
+    $AppId,
+    [string]
+    $Name
+    )
+    $RokuUrl = 'http://' + $Ip + ':8060'
+    if($AppId){
+    Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/launch/$Appid" -method Post
+    }
+    if($Name){
+    $appid = (get-rokuapps $Ip | Where-Object "#text" -like "*$Name*").id
+    Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/launch/$Appid" -method Post
+    }
+}
+
+Function Select-RokuApp {
+    param(
+    [Parameter(Mandatory)] 
+    [string]
+    $Ip
+    )   
 #region WPF Form App Selection List
     
     $RokuName = Get-LocalRokus | Where-Object ip -Like "$ip" | select -ExpandProperty name
@@ -187,42 +241,24 @@ Function Open-RokuApp {
     #endregion
 
     #Select App
-    $RokuUrl = 'http://' + $Ip + ':8060'
-    $AppsWeb = Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/query/apps" -method Get
-    [xml]$Appsxml = $AppsWeb.Content
-    $Apps = $Appsxml.apps.app | select "#text",id -ExpandProperty "#text" | sort "#text"
+    $Apps = Get-RokuApps $Ip
     foreach ($App in $Apps){
-        [void] $Listbox.Items.Add($App)
+        [void] $Listbox.Items.Add($App."#text")
     }
 
     $Form.Topmost = $true
     $Result = $Form.ShowDialog()
     if ($Result -eq 'Cancel'){Return}
     if ($Result -eq 'OK'){
-        $SelectedApp = $Listbox.SelectedItem
-        $App = $Apps | Where-Object "#text" -Like $SelectedApp
-        $AppId = $App.id | Out-String
-        Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/launch/$Appid" -method Post
+        Send-RokuApp -Ip $Ip -Name $Listbox.SelectedItem
         }
+
+
+
+#endregion
 }
 
-#endregion
-
-#region Out-Gridview App Selection List.
-<#
-    #Select App
-    $RokuUrl = 'http://' + $Ip + ':8060'
-    $AppsWeb = Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/query/apps" -method Get
-    [xml]$Appsxml = $AppsWeb.Content
-    $Apps = $Appsxml.apps.app | select "#text",id | sort "#text" 
-    $App = $Apps | Out-GridView -PassThru
-    $AppId = $App.id | Out-String
-    Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/launch/$Appid" -method Post
-    }
-#>
-#endregion
-
-#Hidden Menus (some might work) Based off of https://lifehacker.com/all-the-roku-secret-commands-and-menus-in-one-graphic-1779010902
+#Hidden Menus (some might work) Reference: https://lifehacker.com/all-the-roku-secret-commands-and-menus-in-one-graphic-1779010902
 
 Function Send-RokuSecretMenu1 {
         param(
@@ -252,7 +288,7 @@ Function Send-RokuSecretMenu1 {
     Start-Sleep -Seconds 1
     Send-RokuCommand -ip $Ip -RokuCommand 'Rev'
     
-    }
+    } #Works
 
 Function Send-RokuSecretMenu2 {
         param(
@@ -260,29 +296,29 @@ Function Send-RokuSecretMenu2 {
     [string]
     $Ip
     )
-    Send-RokuCommand -ip $Ip -RokuCommand 'Home'
+    Send-RokuCommand  -ip $Ip -RokuCommand 'Home'
     Start-Sleep -Seconds 3
-    Send-RokuCommand -ip $Ip -RokuCommand 'Home'
+    Send-RokuCommand  -ip $Ip -RokuCommand 'Home'
     Start-Sleep -Seconds 1
-    Send-RokuCommand -ip $Ip -RokuCommand 'Home'
+    Send-RokuCommand  -ip $Ip -RokuCommand 'Home'
     Start-Sleep -Seconds 1
-    Send-RokuCommand -ip $Ip -RokuCommand 'Home'
+    Send-RokuCommand  -ip $Ip -RokuCommand 'Home'
     Start-Sleep -Seconds 1
-    Send-RokuCommand -ip $Ip -RokuCommand 'Home'
+    Send-RokuCommand  -ip $Ip -RokuCommand 'Home'
     Start-Sleep -Seconds 1
-    Send-RokuCommand -ip $Ip -RokuCommand 'Home'
+    Send-RokuCommand  -ip $Ip -RokuCommand 'Home'
     Start-Sleep -Seconds 1
-    Send-RokuCommand -ip $Ip -RokuCommand 'Up'
+    Send-RokuCommand  -ip $Ip -RokuCommand 'Up'
     Start-Sleep -Seconds 1
-    Send-RokuCommand -ip $Ip -RokuCommand 'Right'
+    Send-RokuCommand  -ip $Ip -RokuCommand 'Right'
     Start-Sleep -Seconds 1
-    Send-RokuCommand -ip $Ip -RokuCommand 'Down'
+    Send-RokuCommand  -ip $Ip -RokuCommand 'Down'
     Start-Sleep -Seconds 1
-    Send-RokuCommand -ip $Ip -RokuCommand 'Left'
+    Send-RokuCommand  -ip $Ip -RokuCommand 'Left'
     Start-Sleep -Seconds 1
-    Send-RokuCommand -ip $Ip -RokuCommand 'Up'
+    Send-RokuCommand  -ip $Ip -RokuCommand 'Up'
     
-    }
+    } #Does not work with function. Works with real remote.
 
 Function Send-RokuWifiMenu {
         param(
@@ -310,7 +346,7 @@ Function Send-RokuWifiMenu {
     Start-Sleep -Seconds 1
     Send-RokuCommand -ip $Ip -RokuCommand 'Up'
     
-    }
+    } #Does not work with function. Works with real remote.
 
 Function Send-PlatformMenu {
         param(
@@ -338,7 +374,7 @@ Function Send-PlatformMenu {
     Start-Sleep -Seconds 1
     Send-RokuCommand -ip $Ip -RokuCommand 'Fw'
     
-    }
+    } #Does not work with function. Works with real remote.
 
 Function Send-DeveloperMenu {
         param(
@@ -366,4 +402,4 @@ Function Send-DeveloperMenu {
     Start-Sleep -Milliseconds 700
     Send-RokuCommand -ip $Ip -RokuCommand 'Right'
     
-    }
+    } #Does not work with function. Works with real remote.
