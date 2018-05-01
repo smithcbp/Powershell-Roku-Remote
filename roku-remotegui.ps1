@@ -11,13 +11,23 @@
     Roku API https://sdkdocs.roku.com/display/sdkdoc/External+Control+API
 #>
 
+#region Path Variables
+
+$IconName                        = 'rokuremote.ico'
+$ModuleName                      = 'Roku-Remote.psm1'
+$IconPath                        = Join-Path $PSScriptRoot $IconName
+$ModulePath                      = Join-Path $PSScriptRoot $ModuleName
+
+#endregion
+
+#region Add required assemblies.
+
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 Add-Type -AssemblyName PresentationFramework
 [System.Windows.Forms.Application]::EnableVisualStyles()
 
-$iconpath                        = '.\rokuremote.ico'
-$modulepath                      = '.\Roku-Remote.psm1'
+#endregion
 
 #region begin GUI
 
@@ -26,7 +36,7 @@ $Form.clientSize                 = '400,600'
 $Form.text                       = 'Roku Remote'
 $Form.topMost                    = $false
 $Form.backcolor                  = 'Black'
-$Form.icon                       = $iconpath
+$Form.icon                       = $IconPath
 $Form.FormBorderStyle            = 'FixedSingle'
 $Form.MaximizeBox                = $false
 
@@ -259,9 +269,24 @@ $RebootButton.Add_Click({
 
 #endregion
 
-$Rokus = Get-LocalRokus
-$Rokus | ForEach-Object {[void] $RokuList.Items.Add($_.Description)}
-$SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
+#region Find and List Rokus on local network
+
+$Rokus = Get-LocalRokus 
+
+if (!$Rokus) {
+    $RokuList.Items.Add("Cannot find any Roku Devices")
+    $RokuList.Items.Add("on the local network")
+    $Form.ShowDialog()
+    return
+    }
+
+if ($Rokus){
+    $Rokus | ForEach-Object {[void] $RokuList.Items.Add($_.Description)}
+    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
+    return
+    }
+
+#endregion
 
 $Form.ShowDialog()
 
