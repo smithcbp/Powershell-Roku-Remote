@@ -16,8 +16,8 @@ Add-Type -AssemblyName System.Drawing
 Add-Type -AssemblyName PresentationFramework
 [System.Windows.Forms.Application]::EnableVisualStyles()
 
-$iconpath                        = "C:\Scripts\roku-remote\rokuremote.ico"
-$modulepath                      = 'c:\Scripts\roku-remote\Roku-Remote.psm1'
+$iconpath                        = '.\rokuremote.ico'
+$modulepath                      = '.\Roku-Remote.psm1'
 
 #region begin GUI
 
