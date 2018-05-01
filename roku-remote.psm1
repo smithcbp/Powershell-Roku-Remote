@@ -62,11 +62,11 @@ $Rokus = foreach ($RokuIp_Item in $RokuIps) {
     $Rokuweb = (Invoke-WebRequest -UseBasicParsing $Uri)
     [xml]$RokuXML = $Rokuweb.Content
     $RokuName = $RokuXML.root.device.friendlyName
-    $RokuModes = $RokuXML.root.device.modelname + ' ' + $RokuXML.root.device.modelnumber
+    $RokuModel = $RokuXML.root.device.modelname + ' ' + $RokuXML.root.device.modelnumber
     [pscustomobject]@{
         Ip = $Ip
         Name = $RokuName
-        Model = $RokuModes
+        Model = $RokuModel
         Description = $RokuName + ' | ' + $Ip
         }
     }
