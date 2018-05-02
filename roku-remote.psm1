@@ -150,6 +150,33 @@ Function Get-RokuApps {
     Write-Output $Appsxml.apps.app
 }
 
+Function Get-RokuAppImage {
+    param(
+    [Parameter(Mandatory)] 
+    [string]
+    $Ip,
+    [string]
+    $AppId,
+    [string]
+    $Name,
+    [Parameter(Mandatory)] 
+    [string]
+    $DestFile
+    )
+
+    $RokuUrl = 'http://' + $Ip + ':8060'
+
+    if($AppId){
+        if (Test-Path $DestFile) {write-verbose "$DestFile Exists Already"}
+        if (!(Test-Path $DestFile)) {Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/query/icon/$Appid" -method Get -OutFile $DestFile}
+    }
+    if($Name){
+    $appid = (get-rokuapps $Ip | Where-Object "#text" -like "$Name").id
+    if (Test-Path $DestFile) {write-verbose "$DestFile Exists Already"}
+    if (!(Test-Path $DestFile)) {Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/query/icon/$Appid" -method Get -OutFile $DestFile}
+    }
+}
+
 Function Send-RokuApp {
     param(
     [Parameter(Mandatory)] 
@@ -257,6 +284,16 @@ Function Select-RokuApp {
 
 #endregion
 }
+
+
+
+
+
+
+
+
+
+
 
 #Hidden Menus (some might work) Reference: https://lifehacker.com/all-the-roku-secret-commands-and-menus-in-one-graphic-1779010902
 
