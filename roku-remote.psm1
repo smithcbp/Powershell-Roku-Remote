@@ -215,9 +215,9 @@ Function Select-RokuApp {
     #region Apps Listbox Gui
     $Form                           = New-Object System.Windows.Forms.Form
     $Form.text                      = 'Select an App'
-    $Form.size                      = New-Object System.Drawing.Size(350,640)
+    $Form.size                      = New-Object System.Drawing.Size(400,640)
     $Form.startposition             = 'CenterScreen'
-    $Form.backcolor                 = 'Black'
+    $Form.backcolor                 = 'MidnightBlue'
     $Form.FormBorderStyle           = 'FixedSingle'
     $Form.MaximizeBox                = $false
 
@@ -257,10 +257,10 @@ Function Select-RokuApp {
 
     $Listbox                        = New-Object System.Windows.Forms.ListBox
     $Listbox.location               = New-Object System.Drawing.Point(10,60)
-    $Listbox.size                   = New-Object System.Drawing.Size(293,20)
+    $Listbox.size                   = New-Object System.Drawing.Size(360,20)
     $Listbox.height                 = 480
     $Listbox.font                   = New-Object System.Drawing.Font('Consolas','14',[System.Drawing.FontStyle]::Bold)
-    $Listbox.BackColor              = 'Black'
+    $Listbox.BackColor              = 'DarkBlue'
     $Listbox.ForeColor              = 'Cyan'
 
     $Form.Controls.AddRange(@($Label,$Label2,$CancelButton,$OKButton,$Listbox))

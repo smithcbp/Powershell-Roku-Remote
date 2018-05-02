@@ -24,7 +24,7 @@ $FavApps                         = @(
                                       'Netflix'
                                       'Hulu'
                                       'Plex'
-                                      'Youtube'
+                                      'Crackle'
                                       )
 
 #endregion
