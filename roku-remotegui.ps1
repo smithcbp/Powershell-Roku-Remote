@@ -17,6 +17,11 @@ $IconName                        = 'rokuremote.ico'
 $ModuleName                      = 'Roku-Remote.psm1'
 $IconPath                        = Join-Path $PSScriptRoot $IconName
 $ModulePath                      = Join-Path $PSScriptRoot $ModuleName
+$FavApps                         = @( 'Netflix'
+                                      'Hulu'
+                                      'Plex'
+                                      'Pandora'
+                                      )
 
 #endregion
 
@@ -32,13 +37,23 @@ Add-Type -AssemblyName PresentationFramework
 #region begin GUI
 
 $Form                            = New-Object System.Windows.Forms.Form
-$Form.clientSize                 = '400,600'
+$Form.clientSize                 = '400,650'
 $Form.text                       = 'Roku Remote'
 $Form.topMost                    = $false
 $Form.backcolor                  = 'Black'
 $Form.icon                       = $IconPath
 $Form.FormBorderStyle            = 'FixedSingle'
 $Form.MaximizeBox                = $false
+
+$Label1                          = New-Object System.Windows.Forms.Label
+$Label1.text                     = 'Select your Roku:'
+$Label1.textalign                = 'MiddleCenter' 
+$Label1.autosize                 = $true
+$Label1.width                    = 25
+$Label1.height                   = 10
+$Label1.location                 = New-Object System.Drawing.Point(20,20)
+$Label1.font                     = 'Consolas,18'
+$Label1.forecolor                = 'Cyan'
 
 $UpButton                        = New-Object System.Windows.Forms.Button
 $UpButton.text                   = '▲'
@@ -169,17 +184,44 @@ $RokuList.horizontalscrollbar    = $true
 $RokuList.backcolor              = 'Black'
 $RokuList.forecolor              = 'Cyan'
 
-$Label1                          = New-Object System.Windows.Forms.Label
-$Label1.text                     = 'Select your Roku:'
-$Label1.textalign                = 'MiddleCenter' 
-$Label1.autosize                 = $true
-$Label1.width                    = 25
-$Label1.height                   = 10
-$Label1.location                 = New-Object System.Drawing.Point(20,20)
-$Label1.font                     = 'Consolas,18'
-$Label1.forecolor                = 'Cyan'
+$FavButton1                      = New-Object System.Windows.Forms.Button
+$FavButton1.text                 = $FavApps[0]
+$FavButton1.width                = 80
+$FavButton1.height               = 50
+$FavButton1.location             = New-Object System.Drawing.Point(25,585)
+$FavButton1.font                 = 'Microsoft Sans Serif,10'
+$FavButton1.backcolor            = 'Blue'
+$FavButton1.forecolor              = 'Cyan'
 
-$Form.controls.AddRange(@($UpButton,$DownButton,$RightButton,$SelectButton,$LeftButton,$BackButton,$HomeButton,$RebootButton,$AppsButton,$RokuList,$Label1,$InfoButton,$RRButton,$PlayButton,$FFButton))
+$FavButton2                      = New-Object System.Windows.Forms.Button
+$FavButton2.text                 = $FavApps[1]
+$FavButton2.width                = 80
+$FavButton2.height               = 50
+$FavButton2.location             = New-Object System.Drawing.Point(115,585)
+$FavButton2.font                 = 'Microsoft Sans Serif,10'
+$FavButton2.backcolor            = 'Blue'
+$FavButton2.forecolor              = 'Cyan'
+
+$FavButton3                      = New-Object System.Windows.Forms.Button
+$FavButton3.text                 = $FavApps[2]
+$FavButton3.width                = 80
+$FavButton3.height               = 50
+$FavButton3.location             = New-Object System.Drawing.Point(205,585)
+$FavButton3.font                 = 'Microsoft Sans Serif,10'
+$FavButton3.backcolor            = 'Blue'
+$FavButton3.forecolor              = 'Cyan'
+
+$FavButton4                      = New-Object System.Windows.Forms.Button
+$FavButton4.text                 = $FavApps[3]
+$FavButton4.width                = 80
+$FavButton4.height               = 50
+$FavButton4.location             = New-Object System.Drawing.Point(295,585)
+$FavButton4.font                 = 'Microsoft Sans Serif,10'
+$FavButton4.backcolor            = 'Blue'
+$FavButton4.forecolor              = 'Cyan'
+
+
+$Form.controls.AddRange(@($UpButton,$DownButton,$RightButton,$SelectButton,$LeftButton,$BackButton,$HomeButton,$RebootButton,$AppsButton,$RokuList,$Label1,$InfoButton,$RRButton,$PlayButton,$FFButton,$FavButton1,$FavButton2,$FavButton3,$FavButton4))
 
 #endregion
 
@@ -259,6 +301,24 @@ $AppsButton.Add_Click({
         } 
     })
 
+$FavButton1.Add_Click({
+    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
+    Send-RokuApp -Ip $SelectedRoku.ip -Name $FavApps[0]
+    })
+
+$FavButton2.Add_Click({
+    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
+    Send-RokuApp -Ip $SelectedRoku.ip -Name $FavApps[1]
+    })
+$FavButton3.Add_Click({
+    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
+    Send-RokuApp -Ip $SelectedRoku.ip -Name $FavApps[2]
+    })
+$FavButton4.Add_Click({
+    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
+    Send-RokuApp -Ip $SelectedRoku.ip -Name $FavApps[3]
+    })
+
 $RebootButton.Add_Click({
     $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
     Start-Job -ArgumentList $SelectedRoku.ip -ScriptBlock {
@@ -276,14 +336,11 @@ $Rokus = Get-LocalRokus
 if (!$Rokus) {
     $RokuList.Items.Add("Cannot find any Roku Devices")
     $RokuList.Items.Add("on the local network")
-    $Form.ShowDialog()
-    return
     }
 
 if ($Rokus){
     $Rokus | ForEach-Object {[void] $RokuList.Items.Add($_.Description)}
     $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    return
     }
 
 #endregion

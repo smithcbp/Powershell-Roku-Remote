@@ -12,7 +12,7 @@ Ip            Name                          Model                Description
 192.168.0.110 Bedroom Roku Stick           Roku Stick 3500X     Bedroom Roku Stick | 192.168.0.110
 192.168.0.111 Roku Express                 Roku Express 3700X   Roku Express  | 192.168.0.111
 
-Send-RokuCommand -ip $IP -rokucommand 'Home'
+Send-RokuCommand -ip $IP -rokucommand 'Home' (adding updown will send /keydown/$RokuCommand, wait 100ms, /keyup/$RokuCommand instead of /keypress/$RokuCommand)
     Sends the specified command to the specified roku
 
 Send-RokuReboot -ip $IP
@@ -165,7 +165,7 @@ Function Send-RokuApp {
     Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/launch/$Appid" -method Post
     }
     if($Name){
-    $appid = (get-rokuapps $Ip | Where-Object "#text" -like "*$Name*").id
+    $appid = (get-rokuapps $Ip | Where-Object "#text" -like "$Name").id
     Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/launch/$Appid" -method Post
     }
 }
