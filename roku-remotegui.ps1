@@ -17,7 +17,9 @@ $IconName                        = 'rokuremote.ico'
 $ModuleName                      = 'Roku-Remote.psm1'
 $IconPath                        = Join-Path $PSScriptRoot $IconName
 $ModulePath                      = Join-Path $PSScriptRoot $ModuleName
-$FavApps                         = @( 'Netflix'
+
+$FavApps                         = @(
+                                      'Netflix'
                                       'Hulu'
                                       'Plex'
                                       'Pandora'
