@@ -9,9 +9,11 @@ roku-remote.psm1
 	A collection of Roku remote functions.
 	Import-Module ./roku-remote.psm1
 
-Get-LocalRokus
+Get-LocalRokus [-usearp]
 	
 	Outputs the Name, Model, IP, and Description of all of the local Roku Devices.
+	
+	-usearp switch adds compatibility for PWSH 6+. It uses 'arp -a' instead of 'get-netneighbor' to collect local Roku ips. 
 
 Send-RokuCommand -ip $IP -rokucommand 'Home'
     
