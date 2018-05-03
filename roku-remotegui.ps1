@@ -75,7 +75,7 @@ $DownButton.height               = 60
 $DownButton.location             = New-Object System.Drawing.Point(171,337)
 $DownButton.font                 = 'Microsoft Sans Serif,16'
 $DownButton.backcolor            = 'Blue'
-$DownButton.forecolor              = 'Cyan'
+$DownButton.forecolor            = 'Cyan'
 
 $RightButton                     = New-Object System.Windows.Forms.Button
 $RightButton.text                = '►'
@@ -85,7 +85,7 @@ $RightButton.location            = New-Object System.Drawing.Point(237,271)
 $RightButton.font                = 'Microsoft Sans Serif,30'
 $RightButton.textAlign           = 'MiddleCenter'
 $RightButton.backcolor           = 'Blue'
-$RightButton.forecolor              = 'Cyan'
+$RightButton.forecolor           = 'Cyan'
 
 $SelectButton                    = New-Object System.Windows.Forms.Button
 $SelectButton.text               = 'OK'
@@ -94,7 +94,7 @@ $SelectButton.height             = 60
 $SelectButton.location           = New-Object System.Drawing.Point(171,271)
 $SelectButton.font               = 'Microsoft Sans Serif,12'
 $SelectButton.backcolor          = 'Blue'
-$SelectButton.forecolor              = 'Cyan'
+$SelectButton.forecolor          = 'Cyan'
 
 $LeftButton                      = New-Object System.Windows.Forms.Button
 $LeftButton.text                 = '◄'
@@ -102,7 +102,7 @@ $LeftButton.width                = 60
 $LeftButton.height               = 60
 $LeftButton.location             = New-Object System.Drawing.Point(105,271)
 $LeftButton.backcolor            = 'Blue'
-$LeftButton.forecolor              = 'Cyan'
+$LeftButton.forecolor            = 'Cyan'
 $LeftButton.font                 = 'Microsoft Sans Serif,30'
 
 
@@ -113,7 +113,7 @@ $BackButton.height               = 50
 $BackButton.location             = New-Object System.Drawing.Point(40,195)
 $BackButton.font                 = 'Microsoft Sans Serif,12'
 $BackButton.backcolor            = 'Blue'
-$BackButton.forecolor             = 'Cyan'
+$BackButton.forecolor            = 'Cyan'
 
 $HomeButton                      = New-Object System.Windows.Forms.Button
 $HomeButton.text                 = 'Home'
@@ -122,7 +122,7 @@ $HomeButton.height               = 50
 $HomeButton.location             = New-Object System.Drawing.Point(285,195)
 $HomeButton.font                 = 'Microsoft Sans Serif,12'
 $HomeButton.backcolor            = 'Blue'
-$HomeButton.forecolor              = 'Cyan'
+$HomeButton.forecolor            = 'Cyan'
 
 $InfoButton                      = New-Object System.Windows.Forms.Button
 $InfoButton.text                 = "*"
@@ -131,7 +131,7 @@ $InfoButton.height               = 50
 $InfoButton.location             = New-Object System.Drawing.Point(176,470)
 $InfoButton.font                 = 'Microsoft Sans Serif,24'
 $InfoButton.backcolor            = 'Blue'
-$InfoButton.forecolor              = 'Cyan'
+$InfoButton.forecolor            = 'Cyan'
 
 $RRButton                        = New-Object System.Windows.Forms.Button
 $RRButton.text                   = '«'
@@ -167,7 +167,7 @@ $RebootButton.height             = 50
 $RebootButton.location           = New-Object System.Drawing.Point(260,470)
 $RebootButton.font               = 'Microsoft Sans Serif,12'
 $RebootButton.backcolor          = 'Blue'
-$RebootButton.forecolor              = 'Cyan'
+$RebootButton.forecolor          = 'Cyan'
 
 $AppsButton                      = New-Object System.Windows.Forms.Button
 $AppsButton.text                 = 'Apps'
@@ -188,42 +188,41 @@ $RokuList.backcolor              = 'DarkBlue'
 $RokuList.forecolor              = 'Cyan'
 
 $FavButton1                      = New-Object System.Windows.Forms.Button
-#$FavButton1.text                 = $FavApps[0]
 $FavButton1.width                = 80
 $FavButton1.height               = 50
 $FavButton1.location             = New-Object System.Drawing.Point(25,535)
 $FavButton1.font                 = 'Microsoft Sans Serif,10'
-#$FavButton1.backcolor            = 'Blue'
-#$FavButton1.forecolor            = 'Cyan'
+#$FavButton1.backcolor           = 'Blue'
+#$FavButton1.forecolor           = 'Cyan'
+#$FavButton1.text                = $FavApps[0]
 
 
 $FavButton2                      = New-Object System.Windows.Forms.Button
-#$FavButton2.text                 = $FavApps[1]
 $FavButton2.width                = 80
 $FavButton2.height               = 50
 $FavButton2.location             = New-Object System.Drawing.Point(115,535)
 $FavButton2.font                 = 'Microsoft Sans Serif,10'
-#$FavButton2.backcolor            = 'Blue'
-#$FavButton2.forecolor              = 'Cyan'
+#$FavButton2.backcolor           = 'Blue'
+#$FavButton2.forecolor           = 'Cyan'
+#$FavButton2.text                = $FavApps[1]
 
 $FavButton3                      = New-Object System.Windows.Forms.Button
-#$FavButton3.text                 = $FavApps[2]
 $FavButton3.width                = 80
 $FavButton3.height               = 50
 $FavButton3.location             = New-Object System.Drawing.Point(205,535)
 $FavButton3.font                 = 'Microsoft Sans Serif,10'
-#$FavButton3.backcolor            = 'Blue'
-#$FavButton3.forecolor              = 'Cyan'
+#$FavButton3.backcolor           = 'Blue'
+#$FavButton3.forecolor           = 'Cyan'
+#$FavButton3.text                = $FavApps[2]
 
 $FavButton4                      = New-Object System.Windows.Forms.Button
-#$FavButton4.text                 = $FavApps[3]
 $FavButton4.width                = 80
 $FavButton4.height               = 50
 $FavButton4.location             = New-Object System.Drawing.Point(295,535)
 $FavButton4.font                 = 'Microsoft Sans Serif,10'
-#$FavButton4.backcolor            = 'Blue'
-#$FavButton4.forecolor              = 'Cyan'
-
+#$FavButton4.backcolor           = 'Blue'
+#$FavButton4.forecolor           = 'Cyan'
+#$FavButton4.text                = $FavApps[3]
 
 $Form.controls.AddRange(@($UpButton,$DownButton,$RightButton,$SelectButton,$LeftButton,$BackButton,$HomeButton,$RebootButton,$AppsButton,$RokuList,$Label1,$InfoButton,$RRButton,$PlayButton,$FFButton,$FavButton1,$FavButton2,$FavButton3,$FavButton4))
 
@@ -349,28 +348,26 @@ if ($Rokus){
 
 #endregion
 
-#region Collect images for favorite icons
+#region Collect images for favorite apps buttons
 
 foreach ($AppName in $FavApps){
+    if (!(Test-Path $env:Temp\$Appname.jpg)) {Get-RokuAppImage -Ip $Rokus[0].Ip -Name $AppName -DestFile $env:Temp\$Appname.jpg}
+    }
 
-Get-RokuAppImage -Ip $Rokus[0].Ip -Name $AppName -DestFile $env:Temp\$Appname.jpg
-
-}
-
-$FavButton1ImagePath             = "$env:Temp" + "\" + $FavApps[0] + ".jpg"
-$FavButton1.BackgroundImage      = [System.Drawing.Image]::FromFile($FavButton1ImagePath)
+$FavButton1ImagePath              = "$env:Temp" + "\" + $FavApps[0] + ".jpg"
+$FavButton1.BackgroundImage       = [System.Drawing.Image]::FromFile($FavButton1ImagePath)
 $FavButton1.BackgroundImageLayout = 'Stretch'
 
-$FavButton2ImagePath             = "$env:Temp" + "\" + $FavApps[1] + ".jpg"
-$FavButton2.BackgroundImage      = [System.Drawing.Image]::FromFile($FavButton2ImagePath)
+$FavButton2ImagePath              = "$env:Temp" + "\" + $FavApps[1] + ".jpg"
+$FavButton2.BackgroundImage       = [System.Drawing.Image]::FromFile($FavButton2ImagePath)
 $FavButton2.BackgroundImageLayout = 'Stretch'
 
-$FavButton3ImagePath             = "$env:Temp" + "\" + $FavApps[2] + ".jpg"
-$FavButton3.BackgroundImage      = [System.Drawing.Image]::FromFile($FavButton3ImagePath)
+$FavButton3ImagePath              = "$env:Temp" + "\" + $FavApps[2] + ".jpg"
+$FavButton3.BackgroundImage       = [System.Drawing.Image]::FromFile($FavButton3ImagePath)
 $FavButton3.BackgroundImageLayout = 'Stretch'
 
-$FavButton4ImagePath             = "$env:Temp" + "\" + $FavApps[3] + ".jpg"
-$FavButton4.BackgroundImage      = [System.Drawing.Image]::FromFile($FavButton4ImagePath)
+$FavButton4ImagePath              = "$env:Temp" + "\" + $FavApps[3] + ".jpg"
+$FavButton4.BackgroundImage       = [System.Drawing.Image]::FromFile($FavButton4ImagePath)
 $FavButton4.BackgroundImageLayout = 'Stretch'
 
 #endregion
