@@ -40,6 +40,11 @@ Function Get-LocalRokus {
         [switch]$usearp
         )
 
+    if ((!$usearp) -and ($PSVersionTable.PSVersion.Major -ge 6)){
+        Write-Error -Message "Powershell 6+ Detected use 'Get-LokalRokus -usearp' Instead"
+        return
+        }
+
 $RokuOUIS = @(
     'DC-3A-5E'
     'D0-4D-2C'
@@ -89,55 +94,6 @@ $Rokus = foreach ($RokuIp_Item in $RokuIps) {
         }
     }
 Write-Output $Rokus
-}
-
-Function Get-LocalRokusArp {    
-    
-    $RokuOUIS = @(
-    'DC-3A-5E'
-    'D0-4D-2C'
-    'CC-6D-A0'
-    'C8-3A-6B'
-    'B8-A1-75'
-    'B8-3E-59'
-    'B0-EE-7B'
-    'B0-A7-37'
-    'AC-3A-7A'
-    '88-DE-A9'
-    '08-05-81'
-    '00-0D-4B'
-    )
-
-    
-    $RokuIps = @()
-    $Rokus = @()
-
-    $arp = arp -a
-
-    foreach ($item in $RokuOUIS){
-        $regex = '\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b'
-        [string]$RokuArp = $arp | Select-String -Pattern $item
-        $RokuIps += $Rokuarp | Select-String -Pattern $regex | % { $_.Matches } | % { $_.Value } 
-        }
-    
-    $Rokus = foreach ($RokuIp_Item in $RokuIps) {
-    $Ip = $RokuIp_Item | Out-String
-    $Ip = $Ip.Trim()
-    $Uri = 'http://' + $Ip + ':8060'
-    $Rokuweb = (Invoke-WebRequest -UseBasicParsing $Uri)
-    [xml]$RokuXML = $Rokuweb.Content
-    $RokuName = $RokuXML.root.device.friendlyName
-    $RokuModel = $RokuXML.root.device.modelname + ' ' + $RokuXML.root.device.modelnumber
-    [pscustomobject]@{
-        Ip = $Ip
-        Name = $RokuName
-        Model = $RokuModel
-        Description = $RokuName + ' | ' + $Ip
-        }
-    }
-
-Write-Output $Rokus
-
 }
 
 Function Send-RokuCommand {
@@ -270,6 +226,12 @@ Function Select-RokuApp {
     [string]
     $Ip
     )   
+
+    if ($PSVersionTable.PSVersion.Major -ge 6){
+        Write-Error -Message "This GUI based function is not compatible with PowerShell 6. Use Send-RokuApp instead."
+        return
+        }
+
 #region WPF Form App Selection List
     
     $RokuName = Get-LocalRokus | Where-Object ip -Like "$ip" | select -ExpandProperty name
