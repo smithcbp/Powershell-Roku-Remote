@@ -41,7 +41,7 @@ Function Get-LocalRokus {
         )
 
     if ((!$usearp) -and ($PSVersionTable.PSVersion.Major -ge 6)){
-        Write-Error -Message "Powershell 6+ Detected use 'Get-LokalRokus -usearp' Instead"
+        Write-Error -Message "Powershell 6+ Detected use 'Get-LocalRokus -usearp' Instead"
         return
         }
 
