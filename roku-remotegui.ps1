@@ -11,20 +11,20 @@
     Roku API https://sdkdocs.roku.com/display/sdkdoc/External+Control+API
 #>
 
-#region Path Variables
+#region Variables
 
 $IconName                        = 'rokuremote.ico'
 $ModuleName                      = 'Roku-Remote.psm1'
 $IconPath                        = Join-Path $PSScriptRoot $IconName
 $ModulePath                      = Join-Path $PSScriptRoot $ModuleName
 
-#Add your favorite apps here
+#Add your top 4 favorite apps here
 
 $FavApps                         = @(
                                       'Netflix'
                                       'Hulu'
                                       'Plex'
-                                      'Crackle'
+                                      'YouTube'
                                       )
 
 #endregion
@@ -38,7 +38,7 @@ Add-Type -AssemblyName PresentationFramework
 
 #endregion
 
-#region begin GUI
+#region Build GUI
 
 $Form                            = New-Object System.Windows.Forms.Form
 $Form.clientSize                 = '400,600'
@@ -185,44 +185,35 @@ $RokuList.font                   = 'Ariel,14'
 $RokuList.horizontalscrollbar    = $true
 $RokuList.backcolor              = 'DarkBlue'
 $RokuList.forecolor              = 'Cyan'
-$RokuList.PreviewKeyDown
+$RokuList.DisplayMember          = "Name".Trim()
 
 $FavButton1                      = New-Object System.Windows.Forms.Button
 $FavButton1.width                = 80
 $FavButton1.height               = 50
 $FavButton1.location             = New-Object System.Drawing.Point(25,535)
 $FavButton1.font                 = 'Microsoft Sans Serif,10'
-#$FavButton1.backcolor           = 'Blue'
-#$FavButton1.forecolor           = 'Cyan'
-#$FavButton1.text                = $FavApps[0]
-
+$FavButton1.backcolor              = 'Black'
 
 $FavButton2                      = New-Object System.Windows.Forms.Button
 $FavButton2.width                = 80
 $FavButton2.height               = 50
 $FavButton2.location             = New-Object System.Drawing.Point(115,535)
 $FavButton2.font                 = 'Microsoft Sans Serif,10'
-#$FavButton2.backcolor           = 'Blue'
-#$FavButton2.forecolor           = 'Cyan'
-#$FavButton2.text                = $FavApps[1]
+$FavButton2.backcolor              = 'Black'
 
 $FavButton3                      = New-Object System.Windows.Forms.Button
 $FavButton3.width                = 80
 $FavButton3.height               = 50
 $FavButton3.location             = New-Object System.Drawing.Point(205,535)
 $FavButton3.font                 = 'Microsoft Sans Serif,10'
-#$FavButton3.backcolor           = 'Blue'
-#$FavButton3.forecolor           = 'Cyan'
-#$FavButton3.text                = $FavApps[2]
+$FavButton3.backcolor              = 'Black'
 
 $FavButton4                      = New-Object System.Windows.Forms.Button
 $FavButton4.width                = 80
 $FavButton4.height               = 50
 $FavButton4.location             = New-Object System.Drawing.Point(295,535)
 $FavButton4.font                 = 'Microsoft Sans Serif,10'
-#$FavButton4.backcolor           = 'Blue'
-#$FavButton4.forecolor           = 'Cyan'
-#$FavButton4.text                = $FavApps[3]
+$FavButton4.backcolor              = 'Black'
 
 $Form.controls.AddRange(@($UpButton,$DownButton,$RightButton,$SelectButton,$LeftButton,$BackButton,$HomeButton,$RebootButton,$AppsButton,$RokuList,$Label1,$InfoButton,$RRButton,$PlayButton,$FFButton,$FavButton1,$FavButton2,$FavButton3,$FavButton4))
 
@@ -242,89 +233,74 @@ Import-Module -Force (Resolve-Path($modulepath))
 #region GUI Events
 
 $UpButton.Add_Click({
-    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Send-RokuCommand -ip $SelectedRoku.ip -RokuCommand 'Up'
+    Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand 'Up'
     })
 
 $DownButton.Add_Click({
-    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Send-RokuCommand -ip $SelectedRoku.ip -RokuCommand 'Down'
+    Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand 'Down'
     })
 
 $RightButton.Add_Click({
-    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Send-RokuCommand -ip $SelectedRoku.ip -RokuCommand 'Right'
+    Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand 'Right'
     })
 
 $SelectButton.Add_Click({
-    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Send-RokuCommand -ip $SelectedRoku.ip -RokuCommand 'Select' 
+    Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand 'Select' 
     })
 
 $LeftButton.Add_Click({
-    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Send-RokuCommand -ip $SelectedRoku.ip -RokuCommand 'Left'
+    Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand 'Left'
     })
 
 $BackButton.Add_Click({    
-    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Send-RokuCommand -ip $SelectedRoku.ip -RokuCommand 'Back'
+    Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand 'Back'
     })
 
 $HomeButton.Add_Click({
-    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Send-RokuCommand -ip $SelectedRoku.ip -RokuCommand 'Home'
+    Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand 'Home'
     })
 
 $InfoButton.Add_Click({
-    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Send-RokuCommand -ip $SelectedRoku.ip -RokuCommand 'Info'
+    Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand 'Info'
     })
 
 $RRButton.Add_Click({
-    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Send-RokuCommand -ip $SelectedRoku.ip -RokuCommand 'Rev'
+    Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand 'Rev'
     })
 
 $PlayButton.Add_Click({
-    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Send-RokuCommand -ip $SelectedRoku.ip -RokuCommand 'Play'
+    Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand 'Play'
     })
 
 $FFButton.Add_Click({
-    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Send-RokuSelect -ip $SelectedRoku.ip -RokuCommand 'Fwd'
+    Send-RokuSelect -ip $RokuList.SelectedItem.IP -RokuCommand 'Fwd'
     })
 
 $AppsButton.Add_Click({
-    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Start-Job -ArgumentList $SelectedRoku.ip,$ModulePath -ScriptBlock {
+    Start-Job -ArgumentList $RokuList.SelectedItem.IP,$ModulePath -ScriptBlock {
         Import-Module $args[1]
         Select-RokuApp -ip $args[0] 
         } 
     })
 
 $FavButton1.Add_Click({
-    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Send-RokuApp -Ip $SelectedRoku.ip -Name $FavApps[0]
+    Send-RokuApp -Ip $RokuList.SelectedItem.IP -Name $FavApps[0]
     })
 
 $FavButton2.Add_Click({
-    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Send-RokuApp -Ip $SelectedRoku.ip -Name $FavApps[1]
-    })
-$FavButton3.Add_Click({
-    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Send-RokuApp -Ip $SelectedRoku.ip -Name $FavApps[2]
-    })
-$FavButton4.Add_Click({
-    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Send-RokuApp -Ip $SelectedRoku.ip -Name $FavApps[3]
+    Send-RokuApp -Ip $RokuList.SelectedItem.IP -Name $FavApps[1]
     })
 
-$RebootButton.Add_Click({
-    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-    Start-Job -ArgumentList $SelectedRoku.ip -ScriptBlock {
+$FavButton3.Add_Click({
+    Send-RokuApp -Ip $RokuList.SelectedItem.IP -Name $FavApps[2]
+    })
+
+$FavButton4.Add_Click({
+    Send-RokuApp -Ip $RokuList.SelectedItem.IP -Name $FavApps[3]
+    })
+
+$RebootButton.Add_Click({  
+    Start-Job -ArgumentList $RokuList.SelectedItem.IP -ScriptBlock {
         Import-Module C:\Scripts\roku-remote\Roku-Remote.psm1
         Send-RokuReboot -ip $args[0] 
         } 
@@ -334,72 +310,126 @@ $RebootButton.Add_Click({
 
 #region Keyboard Controls
 
-$keys = @('W','S','A','D','Space','H','B')
+$keys = @('W','S','A','D','Space','H','B','C','I','1-4')
 
 $form.Add_KeyDown({
     if($_.KeyCode -eq 'W'){
-            $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-            Send-RokuCommand -ip $SelectedRoku.ip -RokuCommand Up
+            Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand Up
+            $UpButton.backcolor              = 'Black'
+            Start-Sleep -Milliseconds 200
+            $UpButton.backcolor              = 'Blue'
       }
 })
 
 $form.Add_KeyDown({
     if($_.KeyCode -eq 'S'){
-            $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-            Send-RokuCommand -ip $SelectedRoku.ip -RokuCommand Down
+            Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand Down
+            $DownButton.backcolor              = 'Black'
+            Start-Sleep -Milliseconds 200
+            $DownButton.backcolor              = 'Blue'
       }
 })
 
 $form.Add_KeyDown({
     if($_.KeyCode -eq 'A'){
-            $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-            Send-RokuCommand -ip $SelectedRoku.ip -RokuCommand Left
+            Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand Left
+            $LeftButton.backcolor              = 'Black'
+            Start-Sleep -Milliseconds 200
+            $LeftButton.backcolor              = 'Blue'
       }
 })
 
 $form.Add_KeyDown({
     if($_.KeyCode -eq 'D'){
-            $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-            Send-RokuCommand -ip $SelectedRoku.ip -RokuCommand Right
+            Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand Right
+            $RightButton.backcolor              = 'Black'
+            Start-Sleep -Milliseconds 200
+            $RightButton.backcolor              = 'Blue'
       }
 })
 
 $form.Add_KeyDown({
     if($_.KeyCode -eq 'Space'){
-            $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-            Send-RokuCommand -ip $SelectedRoku.ip -RokuCommand 'Select'
+            Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand 'Select'
+            $SelectButton.backcolor              = 'Black'
+            Start-Sleep -Milliseconds 200
+            $SelectButton.backcolor              = 'Blue'
       }
 })
 
 $form.Add_KeyDown({
     if($_.KeyCode -eq 'H') {
-            $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-            Send-RokuCommand -ip $SelectedRoku.ip -RokuCommand 'Home'
+            Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand 'Home'
+            $HomeButton.backcolor              = 'Black'
+            Start-Sleep -Milliseconds 200
+            $HomeButton.backcolor              = 'Blue'
       }
 })
 
 $form.Add_KeyDown({
     if($_.KeyCode -eq 'B') {
-            $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-            Send-RokuCommand -ip $SelectedRoku.ip -RokuCommand 'Back'
-      }
-})
-
-$form.Add_KeyDown({
-    if($_.KeyCode -eq '191'){
-            $HelpMessage = "Keyboard Shortcuts`n`nW = Up`nA = Left`nS = Down`nD = Right`nSpace = Select`nH = Home`nB = Back`nC = Channels (Apps)`n? = Display this message.`n`nCreated by Chris`nhttps://github.com/smithcbp/Powershell-Roku-Remote"
-            [System.Windows.MessageBox]::Show("$HelpMessage","Help")
-            
+            $BackButton.backcolor              = 'Black'
+            Start-Sleep -Milliseconds 200
+            $BackButton.backcolor              = 'Blue'
+            Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand 'Back'
       }
 })
 
 $form.Add_KeyDown({
     if($_.KeyCode -eq 'C'){
-        $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
-        Select-RokuApp -ip $SelectedRoku.ip 
-        } 
-            
-        
+        $AppsButton.backcolor              = 'Black'
+        Start-Sleep -Milliseconds 200
+        $AppsButton.backcolor              = 'Blue'
+        Select-RokuApp -ip $RokuList.SelectedItem.IP 
+        }
+})
+
+$form.Add_KeyDown({
+    if($_.KeyCode -eq 'I'){
+        $InfoButton.backcolor              = 'Black'
+        Start-Sleep -Milliseconds 200
+        $InfoButton.backcolor              = 'Blue'
+        Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand 'Info'
+        }
+})
+
+$form.Add_KeyDown({
+    if($_.KeyCode -eq '49'){
+        $FavButton1.BackgroundImage       = $Null
+        Send-RokuApp -Ip $RokuList.SelectedItem.IP -Name $FavApps[0]
+        $FavButton1.BackgroundImage       = [System.Drawing.Image]::FromFile($FavButton1ImagePath)
+        }
+})
+
+$form.Add_KeyDown({
+    if($_.KeyCode -eq '50'){
+        $FavButton2.BackgroundImage       = $Null
+        Send-RokuApp -Ip $RokuList.SelectedItem.IP -Name $FavApps[1]
+        $FavButton2.BackgroundImage       = [System.Drawing.Image]::FromFile($FavButton2ImagePath)
+        }
+})
+
+$form.Add_KeyDown({
+    if($_.KeyCode -eq '51'){
+        $FavButton3.BackgroundImage       = $Null
+        Send-RokuApp -Ip $RokuList.SelectedItem.IP -Name $FavApps[2]
+        $FavButton3.BackgroundImage       = [System.Drawing.Image]::FromFile($FavButton3ImagePath)
+        }
+})
+
+$form.Add_KeyDown({
+    if($_.KeyCode -eq '52'){
+        $FavButton4.BackgroundImage       = $Null
+        Send-RokuApp -Ip $RokuList.SelectedItem.IP -Name $FavApps[3]
+        $FavButton4.BackgroundImage       = [System.Drawing.Image]::FromFile($FavButton4ImagePath)
+        }
+})
+
+$form.Add_KeyDown({
+    if($_.KeyCode -eq '191'){
+            $HelpMessage = "Keyboard Shortcuts:`n`nW = Up`nA = Left`nS = Down`nD = Right`nSpace = Select`nH = Home`nB = Back`nC = Channels (Apps)`nI = Info (*Options)`n1-4 = Favorite Apps 1-4`n? = Display this message.`n`nCreated by Chris`nhttps://github.com/smithcbp/Powershell-Roku-Remote"
+            [System.Windows.MessageBox]::Show("$HelpMessage","Help")
+      }
 })
 
 $form.KeyPreview = $true 
@@ -415,9 +445,9 @@ if (!$Rokus) {
     }
 
 if ($Rokus){
-    $Rokus | ForEach-Object {[void] $RokuList.Items.Add($_.Description)}
-    [void] $RokuList.Items.Add("~~~  Type ? for Help  ~~~")
-    $SelectedRoku = $Rokus | Where-Object Description -Like $RokuList.SelectedItem
+    $Rokus | ForEach-Object {[void] $RokuList.Items.Add($_)}
+    [void] $RokuList.Items.Add("##### Type ? for Help #####")
+    
     }
 
 #endregion
