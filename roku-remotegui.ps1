@@ -233,50 +233,62 @@ Import-Module -Force (Resolve-Path($modulepath))
 #region GUI Events
 
 $UpButton.Add_Click({
+    if (!$RokuList.SelectedItem.IP){ [System.Windows.MessageBox]::Show('ERROR: Select your Roku','Error','OK','Error') ; return }
     Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand 'Up'
     })
 
 $DownButton.Add_Click({
+    if (!$RokuList.SelectedItem.IP){ [System.Windows.MessageBox]::Show('ERROR: Select your Roku','Error','OK','Error') ; return }
     Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand 'Down'
     })
 
 $RightButton.Add_Click({
+    if (!$RokuList.SelectedItem.IP){ [System.Windows.MessageBox]::Show('ERROR: Select your Roku','Error','OK','Error') ; return }
     Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand 'Right'
     })
 
 $SelectButton.Add_Click({
+    if (!$RokuList.SelectedItem.IP){ [System.Windows.MessageBox]::Show('ERROR: Select your Roku','Error','OK','Error') ; return }
     Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand 'Select' 
     })
 
 $LeftButton.Add_Click({
+    if (!$RokuList.SelectedItem.IP){ [System.Windows.MessageBox]::Show('ERROR: Select your Roku','Error','OK','Error') ; return }
     Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand 'Left'
     })
 
 $BackButton.Add_Click({    
+    if (!$RokuList.SelectedItem.IP){ [System.Windows.MessageBox]::Show('ERROR: Select your Roku','Error','OK','Error') ; return }
     Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand 'Back'
     })
 
 $HomeButton.Add_Click({
+    if (!$RokuList.SelectedItem.IP){ [System.Windows.MessageBox]::Show('ERROR: Select your Roku','Error','OK','Error') ; return }
     Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand 'Home'
     })
 
 $InfoButton.Add_Click({
+    if (!$RokuList.SelectedItem.IP){ [System.Windows.MessageBox]::Show('ERROR: Select your Roku','Error','OK','Error') ; return }
     Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand 'Info'
     })
 
 $RRButton.Add_Click({
+    if (!$RokuList.SelectedItem.IP){ [System.Windows.MessageBox]::Show('ERROR: Select your Roku','Error','OK','Error') ; return }
     Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand 'Rev'
     })
 
 $PlayButton.Add_Click({
+    if (!$RokuList.SelectedItem.IP){ [System.Windows.MessageBox]::Show('ERROR: Select your Roku','Error','OK','Error') ; return }
     Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand 'Play'
     })
 
 $FFButton.Add_Click({
+    if (!$RokuList.SelectedItem.IP){ [System.Windows.MessageBox]::Show('ERROR: Select your Roku','Error','OK','Error') ; return }
     Send-RokuSelect -ip $RokuList.SelectedItem.IP -RokuCommand 'Fwd'
     })
 
 $AppsButton.Add_Click({
+    if (!$RokuList.SelectedItem.IP){ [System.Windows.MessageBox]::Show('ERROR: Select your Roku','Error','OK','Error') ; return }
     Start-Job -ArgumentList $RokuList.SelectedItem.IP,$ModulePath -ScriptBlock {
         Import-Module $args[1]
         Select-RokuApp -ip $args[0] 
@@ -284,22 +296,27 @@ $AppsButton.Add_Click({
     })
 
 $FavButton1.Add_Click({
+    if (!$RokuList.SelectedItem.IP){ [System.Windows.MessageBox]::Show('ERROR: Select your Roku','Error','OK','Error') ; return }
     Send-RokuApp -Ip $RokuList.SelectedItem.IP -Name $FavApps[0]
     })
 
 $FavButton2.Add_Click({
+    if (!$RokuList.SelectedItem.IP){ [System.Windows.MessageBox]::Show('ERROR: Select your Roku','Error','OK','Error') ; return }
     Send-RokuApp -Ip $RokuList.SelectedItem.IP -Name $FavApps[1]
     })
 
 $FavButton3.Add_Click({
+    if (!$RokuList.SelectedItem.IP){ [System.Windows.MessageBox]::Show('ERROR: Select your Roku','Error','OK','Error') ; return }
     Send-RokuApp -Ip $RokuList.SelectedItem.IP -Name $FavApps[2]
     })
 
 $FavButton4.Add_Click({
+    if (!$RokuList.SelectedItem.IP){ [System.Windows.MessageBox]::Show('ERROR: Select your Roku','Error','OK','Error') ; return }
     Send-RokuApp -Ip $RokuList.SelectedItem.IP -Name $FavApps[3]
     })
 
-$RebootButton.Add_Click({  
+$RebootButton.Add_Click({
+    if (!$RokuList.SelectedItem.IP){ [System.Windows.MessageBox]::Show('ERROR: Select your Roku','Error','OK','Error') ; return }  
     Start-Job -ArgumentList $RokuList.SelectedItem.IP -ScriptBlock {
         Import-Module C:\Scripts\roku-remote\Roku-Remote.psm1
         Send-RokuReboot -ip $args[0] 
@@ -314,69 +331,77 @@ $keys = @('W','S','A','D','Space','H','B','C','I','1-4')
 
 $form.Add_KeyDown({
     if($_.KeyCode -eq 'W'){
-            Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand Up
-            $UpButton.backcolor              = 'Black'
-            Start-Sleep -Milliseconds 200
-            $UpButton.backcolor              = 'Blue'
+        if (!$RokuList.SelectedItem.IP){ [System.Windows.MessageBox]::Show('ERROR: Select your Roku','Error','OK','Error') ; return }
+        Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand Up
+        $UpButton.backcolor              = 'Black'
+        Start-Sleep -Milliseconds 200
+        $UpButton.backcolor              = 'Blue'
       }
 })
 
 $form.Add_KeyDown({
     if($_.KeyCode -eq 'S'){
-            Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand Down
-            $DownButton.backcolor              = 'Black'
-            Start-Sleep -Milliseconds 200
-            $DownButton.backcolor              = 'Blue'
+        if (!$RokuList.SelectedItem.IP){ [System.Windows.MessageBox]::Show('ERROR: Select your Roku','Error','OK','Error') ; return }
+        Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand Down
+        $DownButton.backcolor              = 'Black'
+        Start-Sleep -Milliseconds 200
+        $DownButton.backcolor              = 'Blue'
       }
 })
 
 $form.Add_KeyDown({
     if($_.KeyCode -eq 'A'){
-            Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand Left
-            $LeftButton.backcolor              = 'Black'
-            Start-Sleep -Milliseconds 200
-            $LeftButton.backcolor              = 'Blue'
+        if (!$RokuList.SelectedItem.IP){ [System.Windows.MessageBox]::Show('ERROR: Select your Roku','Error','OK','Error') ; return }
+        Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand Left
+        $LeftButton.backcolor              = 'Black'
+        Start-Sleep -Milliseconds 200
+        $LeftButton.backcolor              = 'Blue'
       }
 })
 
 $form.Add_KeyDown({
     if($_.KeyCode -eq 'D'){
-            Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand Right
-            $RightButton.backcolor              = 'Black'
-            Start-Sleep -Milliseconds 200
-            $RightButton.backcolor              = 'Blue'
+        if (!$RokuList.SelectedItem.IP){ [System.Windows.MessageBox]::Show('ERROR: Select your Roku','Error','OK','Error') ; return }
+        Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand Right
+        $RightButton.backcolor              = 'Black'
+        Start-Sleep -Milliseconds 200
+        $RightButton.backcolor              = 'Blue'
       }
 })
 
 $form.Add_KeyDown({
     if($_.KeyCode -eq 'Space'){
-            Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand 'Select'
-            $SelectButton.backcolor              = 'Black'
-            Start-Sleep -Milliseconds 200
-            $SelectButton.backcolor              = 'Blue'
+        if (!$RokuList.SelectedItem.IP){ [System.Windows.MessageBox]::Show('ERROR: Select your Roku','Error','OK','Error') ; return }
+        Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand 'Select'
+        $SelectButton.backcolor              = 'Black'
+        Start-Sleep -Milliseconds 200
+        $SelectButton.backcolor              = 'Blue'
       }
 })
 
 $form.Add_KeyDown({
     if($_.KeyCode -eq 'H') {
-            Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand 'Home'
-            $HomeButton.backcolor              = 'Black'
-            Start-Sleep -Milliseconds 200
-            $HomeButton.backcolor              = 'Blue'
+        if (!$RokuList.SelectedItem.IP){ [System.Windows.MessageBox]::Show('ERROR: Select your Roku','Error','OK','Error') ; return }
+        Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand 'Home'
+        $HomeButton.backcolor              = 'Black'
+        Start-Sleep -Milliseconds 200
+        $HomeButton.backcolor              = 'Blue'
       }
 })
 
 $form.Add_KeyDown({
     if($_.KeyCode -eq 'B') {
-            $BackButton.backcolor              = 'Black'
-            Start-Sleep -Milliseconds 200
-            $BackButton.backcolor              = 'Blue'
-            Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand 'Back'
+        if (!$RokuList.SelectedItem.IP){ [System.Windows.MessageBox]::Show('ERROR: Select your Roku','Error','OK','Error') ; return }
+        $BackButton.backcolor              = 'Black'
+        Start-Sleep -Milliseconds 200
+        $BackButton.backcolor              = 'Blue'
+        Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand 'Back'
       }
 })
 
 $form.Add_KeyDown({
     if($_.KeyCode -eq 'C'){
+        if (!$RokuList.SelectedItem.IP){ [System.Windows.MessageBox]::Show('ERROR: Select your Roku','Error','OK','Error') ; return }
         $AppsButton.backcolor              = 'Black'
         Start-Sleep -Milliseconds 200
         $AppsButton.backcolor              = 'Blue'
@@ -386,6 +411,7 @@ $form.Add_KeyDown({
 
 $form.Add_KeyDown({
     if($_.KeyCode -eq 'I'){
+        if (!$RokuList.SelectedItem.IP){ [System.Windows.MessageBox]::Show('ERROR: Select your Roku','Error','OK','Error') ; return }
         $InfoButton.backcolor              = 'Black'
         Start-Sleep -Milliseconds 200
         $InfoButton.backcolor              = 'Blue'
@@ -395,6 +421,7 @@ $form.Add_KeyDown({
 
 $form.Add_KeyDown({
     if($_.KeyCode -eq '49'){
+        if (!$RokuList.SelectedItem.IP){ [System.Windows.MessageBox]::Show('ERROR: Select your Roku','Error','OK','Error') ; return }
         $FavButton1.BackgroundImage       = $Null
         Send-RokuApp -Ip $RokuList.SelectedItem.IP -Name $FavApps[0]
         $FavButton1.BackgroundImage       = [System.Drawing.Image]::FromFile($FavButton1ImagePath)
@@ -403,6 +430,7 @@ $form.Add_KeyDown({
 
 $form.Add_KeyDown({
     if($_.KeyCode -eq '50'){
+        if (!$RokuList.SelectedItem.IP){ [System.Windows.MessageBox]::Show('ERROR: Select your Roku','Error','OK','Error') ; return }
         $FavButton2.BackgroundImage       = $Null
         Send-RokuApp -Ip $RokuList.SelectedItem.IP -Name $FavApps[1]
         $FavButton2.BackgroundImage       = [System.Drawing.Image]::FromFile($FavButton2ImagePath)
@@ -411,6 +439,7 @@ $form.Add_KeyDown({
 
 $form.Add_KeyDown({
     if($_.KeyCode -eq '51'){
+        if (!$RokuList.SelectedItem.IP){ [System.Windows.MessageBox]::Show('ERROR: Select your Roku','Error','OK','Error') ; return }
         $FavButton3.BackgroundImage       = $Null
         Send-RokuApp -Ip $RokuList.SelectedItem.IP -Name $FavApps[2]
         $FavButton3.BackgroundImage       = [System.Drawing.Image]::FromFile($FavButton3ImagePath)
@@ -419,6 +448,7 @@ $form.Add_KeyDown({
 
 $form.Add_KeyDown({
     if($_.KeyCode -eq '52'){
+        if (!$RokuList.SelectedItem.IP){ [System.Windows.MessageBox]::Show('ERROR: Select your Roku','Error','OK','Error') ; return }
         $FavButton4.BackgroundImage       = $Null
         Send-RokuApp -Ip $RokuList.SelectedItem.IP -Name $FavApps[3]
         $FavButton4.BackgroundImage       = [System.Drawing.Image]::FromFile($FavButton4ImagePath)
@@ -427,8 +457,8 @@ $form.Add_KeyDown({
 
 $form.Add_KeyDown({
     if($_.KeyCode -eq '191'){
-            $HelpMessage = "Keyboard Shortcuts:`n`nW = Up`nA = Left`nS = Down`nD = Right`nSpace = Select`nH = Home`nB = Back`nC = Channels (Apps)`nI = Info (*Options)`n1-4 = Favorite Apps 1-4`n? = Display this message.`n`nCreated by Chris`nhttps://github.com/smithcbp/Powershell-Roku-Remote"
-            [System.Windows.MessageBox]::Show("$HelpMessage","Help")
+        $HelpMessage = "Keyboard Shortcuts:`n`nW = Up`nA = Left`nS = Down`nD = Right`nSpace = Select`nH = Home`nB = Back`nC = Channels (Apps)`nI = Info (*Options)`n1-4 = Favorite Apps 1-4`n? = Display this message.`n`nCreated by Chris`nhttps://github.com/smithcbp/Powershell-Roku-Remote"
+        [System.Windows.MessageBox]::Show("$HelpMessage","Help")
       }
 })
 

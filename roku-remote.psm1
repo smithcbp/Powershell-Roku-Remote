@@ -104,7 +104,7 @@ Function Send-RokuCommand {
         $RokuCommand, 
         [switch]
         $updown,
-        [Parameter(Mandatory)] 
+        [Parameter(Mandatory)]
         [string]
         $Ip
         )
