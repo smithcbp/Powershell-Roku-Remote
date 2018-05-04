@@ -111,12 +111,15 @@ Function Send-RokuCommand {
     $RokuUrl = 'http://' + $Ip + ':8060'
     
     if ($updown){
-        Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keydown/$RokuCommand" -method Post
+        $web = Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keydown/$RokuCommand" -method Post
+        if ($web.StatusDescription -like "OK"){Write-Output "Sending $RokuCommand to $Ip,keydown"}
         Start-Sleep -Milliseconds 100
-        Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keyup/$RokuCommand" -method Post 
+        $web = Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keyup/$RokuCommand" -method Post 
+        if ($web.StatusDescription -like "OK"){Write-Output "Sending $RokuCommand to $Ip,keyup"}
         }
     else {
-        Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/$RokuCommand" -method Post
+        $web = Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/keypress/$RokuCommand" -method Post
+        if ($web.StatusDescription -like "OK"){Write-Output "Sending $RokuCommand to $Ip"}
         }
 }
 
@@ -313,10 +316,6 @@ Function Select-RokuApp {
 
 #endregion
 }
-
-
-
-
 
 
 
