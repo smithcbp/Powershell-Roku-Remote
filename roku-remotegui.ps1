@@ -45,7 +45,7 @@ $Form.MaximizeBox                = $false
 
 
 $Label1                          = New-Object System.Windows.Forms.Label
-$Label1.text                     = 'Select your Roku:'
+$Label1.text                     = 'Select Roku:'
 $Label1.textalign                = 'MiddleCenter' 
 $Label1.autosize                 = $true
 $Label1.width                    = 25
