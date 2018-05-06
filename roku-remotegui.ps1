@@ -13,19 +13,12 @@
 
 #region Variables
 
+$FavApps = Get-Content "$env:Temp\Rokufavs.txt"
+
 $IconName                        = 'rokuremote.ico'
 $ModuleName                      = 'Roku-Remote.psm1'
 $IconPath                        = Join-Path $PSScriptRoot $IconName
 $ModulePath                      = Join-Path $PSScriptRoot $ModuleName
-
-#Add your top 4 favorite apps here
-
-$FavApps                         = @(
-                                      'Netflix'
-                                      'Hulu'
-                                      'Plex'
-                                      'YouTube'
-                                      )
 
 #endregion
 
@@ -41,7 +34,7 @@ Add-Type -AssemblyName PresentationFramework
 #region Build GUI
 
 $Form                            = New-Object System.Windows.Forms.Form
-$Form.clientSize                 = '400,510'
+$Form.clientSize                 = '400,530'
 $Form.text                       = 'Roku Remote'
 $Form.topMost                    = $false
 $Form.backcolor                  = 'MidnightBlue'
@@ -188,35 +181,54 @@ $RokuList.DisplayMember          = "Name".Trim()
 $RokuList.DropDownStyle          = 'DropDownList'
 
 
+$FavLabel                          = New-Object System.Windows.Forms.Label
+$FavLabel.text                     = 'Favorite Apps:'
+$FavLabel.textalign                = 'MiddleCenter' 
+$FavLabel.autosize                 = $true
+$FavLabel.width                    = 25
+$FavLabel.height                   = 10
+$FavLabel.location                 = New-Object System.Drawing.Point(35,435)
+$FavLabel.font                     = 'Consolas,12'
+$FavLabel.forecolor                = 'Cyan'
+
+$ChangeFavButton                   = New-Object System.Windows.Forms.Button
+$ChangeFavButton.width             = 60
+$ChangeFavButton.height            = 25
+$ChangeFavButton.location          = New-Object System.Drawing.Point(170,435)
+$ChangeFavButton.font              = 'Microsoft Sans Serif,8'
+$ChangeFavButton.backcolor         = 'Blue'
+$ChangeFavButton.ForeColor         = 'Cyan'
+$ChangeFavButton.Text              = '(change)'
+
 $FavButton1                      = New-Object System.Windows.Forms.Button
 $FavButton1.width                = 80
 $FavButton1.height               = 50
-$FavButton1.location             = New-Object System.Drawing.Point(25,445)
+$FavButton1.location             = New-Object System.Drawing.Point(25,465)
 $FavButton1.font                 = 'Microsoft Sans Serif,10'
 $FavButton1.backcolor              = 'Black'
 
 $FavButton2                      = New-Object System.Windows.Forms.Button
 $FavButton2.width                = 80
 $FavButton2.height               = 50
-$FavButton2.location             = New-Object System.Drawing.Point(115,445)
+$FavButton2.location             = New-Object System.Drawing.Point(115,465)
 $FavButton2.font                 = 'Microsoft Sans Serif,10'
 $FavButton2.backcolor              = 'Black'
 
 $FavButton3                      = New-Object System.Windows.Forms.Button
 $FavButton3.width                = 80
 $FavButton3.height               = 50
-$FavButton3.location             = New-Object System.Drawing.Point(205,445)
+$FavButton3.location             = New-Object System.Drawing.Point(205,465)
 $FavButton3.font                 = 'Microsoft Sans Serif,10'
 $FavButton3.backcolor              = 'Black'
 
 $FavButton4                      = New-Object System.Windows.Forms.Button
 $FavButton4.width                = 80
 $FavButton4.height               = 50
-$FavButton4.location             = New-Object System.Drawing.Point(295,445)
+$FavButton4.location             = New-Object System.Drawing.Point(295,465)
 $FavButton4.font                 = 'Microsoft Sans Serif,10'
 $FavButton4.backcolor              = 'Black'
 
-$Form.controls.AddRange(@($UpButton,$DownButton,$RightButton,$SelectButton,$LeftButton,$BackButton,$HomeButton,$RebootButton,$AppsButton,$RokuList,$Label1,$InfoButton,$RRButton,$PlayButton,$FFButton,$FavButton1,$FavButton2,$FavButton3,$FavButton4))
+$Form.controls.AddRange(@($UpButton,$DownButton,$RightButton,$SelectButton,$LeftButton,$BackButton,$HomeButton,$RebootButton,$AppsButton,$RokuList,$Label1,$InfoButton,$RRButton,$PlayButton,$FFButton,$FavButton1,$FavButton2,$FavButton3,$FavButton4,$FavLabel,$ChangeFavButton))
 
 #endregion
 
@@ -284,19 +296,28 @@ $AppsButton.Add_Click({
         } 
     })
 
+$ChangeFavButton.Add_Click({
+    Set-RokuFavApps -Ip $RokuList.SelectedItem.IP
+    Set-FavAppsPics
+    })
+
 $FavButton1.Add_Click({    
+    $FavApps = Get-Content "$env:Temp\Rokufavs.txt"
     Send-RokuApp -Ip $RokuList.SelectedItem.IP -Name $FavApps[0]
     })
 
 $FavButton2.Add_Click({
+    $FavApps = Get-Content "$env:Temp\Rokufavs.txt"
     Send-RokuApp -Ip $RokuList.SelectedItem.IP -Name $FavApps[1]
     })
 
 $FavButton3.Add_Click({
+    $FavApps = Get-Content "$env:Temp\Rokufavs.txt"
     Send-RokuApp -Ip $RokuList.SelectedItem.IP -Name $FavApps[2]
     })
 
 $FavButton4.Add_Click({
+    $FavApps = Get-Content "$env:Temp\Rokufavs.txt"
     Send-RokuApp -Ip $RokuList.SelectedItem.IP -Name $FavApps[3]
     })
 
@@ -427,8 +448,7 @@ $form.Add_KeyDown({
 })
 
 $form.Add_KeyDown({
-    if($_.KeyCode -eq '191'){
-        $HelpMessage = "
+    if($_.KeyCode -eq '191'){$HelpMessage = "
 Keyboard Shortcuts:
 
 W  =  Up
@@ -472,6 +492,10 @@ if ($Rokus){
 
 #region Collect Favorite App Images
 
+Function Set-FavAppsPics {
+
+$FavApps = Get-Content "$env:Temp\Rokufavs.txt"
+
 foreach ($AppName in $FavApps){
     if (!(Test-Path $env:Temp\$Appname.jpg)) {Get-RokuAppImage -Ip $Rokus[0].Ip -Name $AppName -DestFile $env:Temp\$Appname.jpg}
     }
@@ -491,6 +515,12 @@ $FavButton3.BackgroundImageLayout = 'Stretch'
 $FavButton4ImagePath              = "$env:Temp" + "\" + $FavApps[3] + ".jpg"
 $FavButton4.BackgroundImage       = [System.Drawing.Image]::FromFile($FavButton4ImagePath)
 $FavButton4.BackgroundImageLayout = 'Stretch'
+
+
+
+}
+
+Set-FavAppsPics
 
 #endregion
 

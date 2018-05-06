@@ -300,7 +300,7 @@ Function Select-RokuApp {
     #endregion
 
     #Select App
-    $Apps = Get-RokuApps $Ip
+    $Apps = Get-RokuApps $Ip | sort "#text"
     foreach ($App in $Apps){
         [void] $Listbox.Items.Add($App."#text")
     }
@@ -314,6 +314,95 @@ Function Select-RokuApp {
 
 
 
+#endregion
+}
+
+Function Set-RokuFavApps {
+param(
+    [Parameter(Mandatory)] 
+    [string]
+    $Ip
+    )   
+
+    if ($PSVersionTable.PSVersion.Major -ge 6){
+        Write-Error -Message "This GUI based function is not compatible with PowerShell 6. Use Send-RokuApp instead."
+        return
+        }
+
+#region WPF Form App Selection List
+    
+    $RokuName = Get-LocalRokus | Where-Object ip -Like "$ip" | select -ExpandProperty name
+
+    Add-Type -AssemblyName System.Windows.Forms
+    [System.Windows.Forms.Application]::EnableVisualStyles()
+    Add-Type -AssemblyName System.Drawing
+    Add-Type -AssemblyName PresentationFramework
+    
+    #region Apps Listbox Gui
+    $Form                           = New-Object System.Windows.Forms.Form
+    $Form.text                      = 'Select your 4 favorite apps'
+    $Form.size                      = New-Object System.Drawing.Size(400,640)
+    $Form.startposition             = 'CenterScreen'
+    $Form.backcolor                 = 'MidnightBlue'
+    $Form.FormBorderStyle           = 'FixedSingle'
+    $Form.MaximizeBox                = $false
+
+    $OKButton                       = New-Object System.Windows.Forms.Button
+    $OKButton.location              = New-Object System.Drawing.Point(75,545)
+    $OKButton.size                  = New-Object System.Drawing.Size(70,40)
+    $OKButton.text                  = 'OK'
+    $OKButton.dialogresult          = [System.Windows.Forms.DialogResult]::OK
+    $OKButton.font                  = 'Microsoft Sans Serif,12'
+    $OKButton.forecolor             = 'Cyan'
+    $OKButton.backcolor             = 'Blue'
+    $Form.acceptbutton              = $OKButton
+
+    $CancelButton                   = New-Object System.Windows.Forms.Button
+    $CancelButton.location          = New-Object System.Drawing.Point(190,545)
+    $CancelButton.size              = New-Object System.Drawing.Size(70,40)
+    $CancelButton.text              = 'Cancel'
+    $CancelButton.dialogResult      = [System.Windows.Forms.DialogResult]::Cancel
+    $CancelButton.font              = 'Microsoft Sans Serif,11'
+    $CancelButton.foreColor         = 'Cyan'
+    $CancelButton.backcolor         = 'Blue'
+    $Form.cancelbutton              = $CancelButton
+
+    $Label                          = New-Object System.Windows.Forms.Label
+    $Label.location                 = New-Object System.Drawing.Point(10,15)
+    $Label.size                     = New-Object System.Drawing.Size(280,20)
+    $Label.text                     = 'Select your 4 favorite apps'
+    $Label.font                     = 'Consolas,12'
+    $Label.forecolor                = 'Cyan'
+    
+    $Listbox                        = New-Object System.Windows.Forms.CheckedListBox
+    $Listbox.location               = New-Object System.Drawing.Point(10,60)
+    $Listbox.size                   = New-Object System.Drawing.Size(360,20)
+    $Listbox.height                 = 480
+    $Listbox.font                   = New-Object System.Drawing.Font('Consolas','14',[System.Drawing.FontStyle]::Bold)
+    $Listbox.BackColor              = 'DarkBlue'
+    $Listbox.ForeColor              = 'Cyan'
+    $Listbox.CheckOnClick           = $True
+
+    $Form.Controls.AddRange(@($Label,$Label2,$CancelButton,$OKButton,$Listbox))
+
+    #endregion
+
+    #Select App
+    $Apps = Get-RokuApps $Ip | sort "#text"
+    foreach ($App in $Apps){
+        [void] $Listbox.Items.Add($App."#text")
+    }
+
+    $Form.Topmost = $true
+    $Result = $Form.ShowDialog()
+    if ($Result -eq 'Cancel'){Return}
+    if ($Result -eq 'OK'){
+        $favs = $Listbox.CheckedItems}
+        While($favs.Count -ne 4){[System.Windows.MessageBox]::Show("Please select exactly 4 apps")
+                              $Result = $Form.ShowDialog()}
+        Set-Content -Path "$env:TEMP/Rokufavs.txt" -Force -Value $favs
+        $favs = $favs | Out-String
+        
 #endregion
 }
 
