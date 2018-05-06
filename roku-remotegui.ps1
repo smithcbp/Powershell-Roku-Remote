@@ -42,6 +42,7 @@ $Form.icon                       = $IconPath
 $Form.FormBorderStyle            = 'FixedSingle'
 $Form.MaximizeBox                = $false
 
+
 $Label1                          = New-Object System.Windows.Forms.Label
 $Label1.text                     = 'Select your Roku:'
 $Label1.textalign                = 'MiddleCenter' 
@@ -187,18 +188,19 @@ $FavLabel.textalign                = 'MiddleCenter'
 $FavLabel.autosize                 = $true
 $FavLabel.width                    = 25
 $FavLabel.height                   = 10
-$FavLabel.location                 = New-Object System.Drawing.Point(35,435)
+$FavLabel.location                 = New-Object System.Drawing.Point(23,435)
 $FavLabel.font                     = 'Consolas,12'
 $FavLabel.forecolor                = 'Cyan'
 
 $ChangeFavButton                   = New-Object System.Windows.Forms.Button
-$ChangeFavButton.width             = 60
-$ChangeFavButton.height            = 25
-$ChangeFavButton.location          = New-Object System.Drawing.Point(170,435)
+$ChangeFavButton.width             = 30
+$ChangeFavButton.height            = 20
+$ChangeFavButton.location          = New-Object System.Drawing.Point(155,438)
 $ChangeFavButton.font              = 'Microsoft Sans Serif,8'
-$ChangeFavButton.backcolor         = 'Blue'
+$ChangeFavButton.backcolor         = 'MidnightBlue'
 $ChangeFavButton.ForeColor         = 'Cyan'
-$ChangeFavButton.Text              = '(change)'
+$ChangeFavButton.Text              = 'Set'
+
 
 $FavButton1                      = New-Object System.Windows.Forms.Button
 $FavButton1.width                = 80
