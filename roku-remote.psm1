@@ -123,6 +123,24 @@ Function Send-RokuCommand {
         }
 }
 
+Function Send-RokuSearch {
+    param(       
+        [Parameter(Mandatory)]  
+        [string]
+        $Keyword,
+        [Parameter(Mandatory)]
+        [string]
+        $Ip,
+        [switch]
+        $launch
+        )
+    $RokuUrl = 'http://' + $Ip + ':8060'
+    $web = Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/search/browse?keyword=$Keyword" -method Post
+    if ($web.StatusDescription -like "OK"){Write-Output "Sending Roku Search $Keyword to $Ip"}
+     
+}
+
+
 Function Send-RokuReboot {
     param(
     [Parameter(Mandatory)] 

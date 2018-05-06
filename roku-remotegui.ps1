@@ -27,6 +27,7 @@ $ModulePath                      = Join-Path $PSScriptRoot $ModuleName
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 Add-Type -AssemblyName PresentationFramework
+[System.Reflection.Assembly]::LoadWithPartialName('Microsoft.VisualBasic') | Out-Null
 [System.Windows.Forms.Application]::EnableVisualStyles()
 
 #endregion
@@ -118,11 +119,12 @@ $HomeButton.backcolor            = 'Blue'
 $HomeButton.forecolor            = 'Cyan'
 
 $InfoButton                      = New-Object System.Windows.Forms.Button
+$InfoButton.TextAlign            ='BottomCenter'
 $InfoButton.text                 = "*"
 $InfoButton.width                = 50
 $InfoButton.height               = 50
-$InfoButton.location             = New-Object System.Drawing.Point(176,380)
-$InfoButton.font                 = 'Microsoft Sans Serif,24'
+$InfoButton.location             = New-Object System.Drawing.Point(176,320)
+$InfoButton.font                 = '­­Microsoft Sans Serif,24'
 $InfoButton.backcolor            = 'Blue'
 $InfoButton.forecolor            = 'Cyan'
 
@@ -181,7 +183,6 @@ $RokuList.forecolor              = 'Cyan'
 $RokuList.DisplayMember          = "Name".Trim()
 $RokuList.DropDownStyle          = 'DropDownList'
 
-
 $FavLabel                          = New-Object System.Windows.Forms.Label
 $FavLabel.text                     = 'Favorite Apps:'
 $FavLabel.textalign                = 'MiddleCenter' 
@@ -200,7 +201,6 @@ $ChangeFavButton.font              = 'Microsoft Sans Serif,8'
 $ChangeFavButton.backcolor         = 'MidnightBlue'
 $ChangeFavButton.ForeColor         = 'Cyan'
 $ChangeFavButton.Text              = 'Set'
-
 
 $FavButton1                      = New-Object System.Windows.Forms.Button
 $FavButton1.width                = 80
@@ -230,7 +230,16 @@ $FavButton4.location             = New-Object System.Drawing.Point(295,465)
 $FavButton4.font                 = 'Microsoft Sans Serif,10'
 $FavButton4.backcolor              = 'Black'
 
-$Form.controls.AddRange(@($UpButton,$DownButton,$RightButton,$SelectButton,$LeftButton,$BackButton,$HomeButton,$RebootButton,$AppsButton,$RokuList,$Label1,$InfoButton,$RRButton,$PlayButton,$FFButton,$FavButton1,$FavButton2,$FavButton3,$FavButton4,$FavLabel,$ChangeFavButton))
+$SearchButton                    = New-Object System.Windows.Forms.Button
+$SearchButton.text               = 'Search'
+$SearchButton.width              = 80
+$SearchButton.height             = 50
+$SearchButton.location           = New-Object System.Drawing.Point(160,380)
+$SearchButton.font               = 'Microsoft Sans Serif,12'
+$SearchButton.backcolor          = 'Blue'
+$SearchButton.forecolor          = 'Cyan'
+
+$Form.controls.AddRange(@($UpButton,$DownButton,$RightButton,$SelectButton,$LeftButton,$BackButton,$HomeButton,$RebootButton,$AppsButton,$RokuList,$Label1,$InfoButton,$RRButton,$PlayButton,$FFButton,$FavButton1,$FavButton2,$FavButton3,$FavButton4,$FavLabel,$ChangeFavButton,$SearchButton))
 
 #endregion
 
@@ -328,6 +337,11 @@ $RebootButton.Add_Click({
         Import-Module C:\Scripts\roku-remote\Roku-Remote.psm1
         Send-RokuReboot -ip $args[0] 
         } 
+    })
+
+$SearchButton.Add_Click({
+    $searchquery = [Microsoft.VisualBasic.Interaction]::InputBox("Search:", "Roku Search")
+    if($searchquery){Send-RokuSearch -Keyword $searchquery -Ip $RokuList.SelectedItem.Ip}
     })
 
 #endregion
