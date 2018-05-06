@@ -508,32 +508,6 @@ if ($Rokus){
 
 #region Collect Favorite App Images
 
-Function Set-FavAppsPics {
-
-$FavApps = Get-Content "$env:Temp\Rokufavs.txt"
-
-foreach ($AppName in $FavApps){
-    if (!(Test-Path $env:Temp\$Appname.jpg)) {Get-RokuAppImage -Ip $Rokus[0].Ip -Name $AppName -DestFile $env:Temp\$Appname.jpg}
-    }
-
-$FavButton1ImagePath              = "$env:Temp" + "\" + $FavApps[0] + ".jpg"
-$FavButton1.BackgroundImage       = [System.Drawing.Image]::FromFile($FavButton1ImagePath)
-$FavButton1.BackgroundImageLayout = 'Stretch'
-
-$FavButton2ImagePath              = "$env:Temp" + "\" + $FavApps[1] + ".jpg"
-$FavButton2.BackgroundImage       = [System.Drawing.Image]::FromFile($FavButton2ImagePath)
-$FavButton2.BackgroundImageLayout = 'Stretch'
-
-$FavButton3ImagePath              = "$env:Temp" + "\" + $FavApps[2] + ".jpg"
-$FavButton3.BackgroundImage       = [System.Drawing.Image]::FromFile($FavButton3ImagePath)
-$FavButton3.BackgroundImageLayout = 'Stretch'
-
-$FavButton4ImagePath              = "$env:Temp" + "\" + $FavApps[3] + ".jpg"
-$FavButton4.BackgroundImage       = [System.Drawing.Image]::FromFile($FavButton4ImagePath)
-$FavButton4.BackgroundImageLayout = 'Stretch'
-
-}
-
 Set-FavAppsPics
 
 #endregion

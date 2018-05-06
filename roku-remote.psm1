@@ -394,7 +394,7 @@ param(
     $Label                          = New-Object System.Windows.Forms.Label
     $Label.location                 = New-Object System.Drawing.Point(10,15)
     $Label.size                     = New-Object System.Drawing.Size(280,20)
-    $Label.text                     = 'Select your 4 favorite apps'
+    $Label.text                     = 'Select 4 favorite apps'
     $Label.font                     = 'Consolas,12'
     $Label.forecolor                = 'Cyan'
     
@@ -421,10 +421,10 @@ param(
     $Result = $Form.ShowDialog()
     if ($Result -eq 'Cancel'){Return}
     if ($Result -eq 'OK'){
-        $favs = $Listbox.CheckedItems
+        $favs = $Listbox.CheckedItems  
         While($favs.Count -ne 4){
             $needed = 4 - $favs.Count
-            [System.Windows.MessageBox]::Show("Please select $needed more apps.")
+            [System.Windows.MessageBox]::Show("Select $needed more apps.")
             $Result = $Form.ShowDialog()
             if ($Result -eq 'Cancel'){Return}
             }
@@ -432,9 +432,37 @@ param(
         Set-Content -Path "$env:TEMP/Rokufavs.txt" -Force -Value $favs
         }
     $favs = $favs | Out-String
+    $favs
         
 #endregion
 }
+
+Function Set-FavAppsPics {
+
+$FavApps = Get-Content "$env:Temp\Rokufavs.txt"
+
+foreach ($AppName in $FavApps){
+    if (!(Test-Path $env:Temp\$Appname.jpg)) {Get-RokuAppImage -Ip $Rokus[0].Ip -Name $AppName -DestFile $env:Temp\$Appname.jpg}
+    }
+
+$FavButton1ImagePath              = "$env:Temp" + "\" + $FavApps[0] + ".jpg"
+$FavButton1.BackgroundImage       = [System.Drawing.Image]::FromFile($FavButton1ImagePath)
+$FavButton1.BackgroundImageLayout = 'Stretch'
+
+$FavButton2ImagePath              = "$env:Temp" + "\" + $FavApps[1] + ".jpg"
+$FavButton2.BackgroundImage       = [System.Drawing.Image]::FromFile($FavButton2ImagePath)
+$FavButton2.BackgroundImageLayout = 'Stretch'
+
+$FavButton3ImagePath              = "$env:Temp" + "\" + $FavApps[2] + ".jpg"
+$FavButton3.BackgroundImage       = [System.Drawing.Image]::FromFile($FavButton3ImagePath)
+$FavButton3.BackgroundImageLayout = 'Stretch'
+
+$FavButton4ImagePath              = "$env:Temp" + "\" + $FavApps[3] + ".jpg"
+$FavButton4.BackgroundImage       = [System.Drawing.Image]::FromFile($FavButton4ImagePath)
+$FavButton4.BackgroundImageLayout = 'Stretch'
+
+}
+
 
 #Hidden Menus (some might work) Reference: https://lifehacker.com/all-the-roku-secret-commands-and-menus-in-one-graphic-1779010902
 
