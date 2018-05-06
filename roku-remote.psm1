@@ -397,11 +397,12 @@ param(
     $Result = $Form.ShowDialog()
     if ($Result -eq 'Cancel'){Return}
     if ($Result -eq 'OK'){
-        $favs = $Listbox.CheckedItems}
+        $favs = $Listbox.CheckedItems
         While($favs.Count -ne 4){[System.Windows.MessageBox]::Show("Please select exactly 4 apps")
                               $Result = $Form.ShowDialog()}
         Set-Content -Path "$env:TEMP/Rokufavs.txt" -Force -Value $favs
-        $favs = $favs | Out-String
+        }
+    $favs = $favs | Out-String
         
 #endregion
 }
