@@ -312,8 +312,6 @@ Function Select-RokuApp {
         Send-RokuApp -Ip $Ip -Name $Listbox.SelectedItem
         }
 
-
-
 #endregion
 }
 
@@ -406,12 +404,6 @@ param(
         
 #endregion
 }
-
-
-
-
-
-
 
 #Hidden Menus (some might work) Reference: https://lifehacker.com/all-the-roku-secret-commands-and-menus-in-one-graphic-1779010902
 

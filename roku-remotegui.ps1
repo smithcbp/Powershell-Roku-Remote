@@ -516,8 +516,6 @@ $FavButton4ImagePath              = "$env:Temp" + "\" + $FavApps[3] + ".jpg"
 $FavButton4.BackgroundImage       = [System.Drawing.Image]::FromFile($FavButton4ImagePath)
 $FavButton4.BackgroundImageLayout = 'Stretch'
 
-
-
 }
 
 Set-FavAppsPics
