@@ -35,6 +35,8 @@ Roku API https://sdkdocs.roku.com/display/sdkdoc/External+Control+API
 
 #>
 
+#region Non-Gui Functions
+
 Function Get-LocalRokus {
     param(
         [switch]$usearp
@@ -96,10 +98,10 @@ $Rokus = foreach ($RokuIp_Item in $RokuIps) {
 Write-Output $Rokus
 }
 
-Function Send-RokuCommand {
+Function Send-RokuCommand {   
     param(       
         [Parameter(Mandatory)]  
-        [ValidateSet('Home','Rev','Fwd','Play','Select','Left','Right','Down','Up','Back','InstandReplay','Info','Backspace','Search','Enter','FindRemote')]
+        [ValidateSet('Home','Rev','Fwd','Play','Select','Left','Right','Down','Up','Back','InstantReplay','Info','Backspace','Search','Enter','FindRemote')]
         [string]
         $RokuCommand, 
         [switch]
@@ -140,6 +142,128 @@ Function Send-RokuSearch {
      
 }
 
+Function Start-RokuVoice{
+    param(
+    [Parameter(Mandatory)] 
+    [string]
+    $Ip
+    )
+
+
+[void][System.Reflection.Assembly]::LoadWithPartialName("System.Speech");
+
+##Setup the speaker, this allows the computer to talk
+$speaker = [System.Speech.Synthesis.SpeechSynthesizer]::new();
+$speaker.SelectVoice('Microsoft Zira Desktop');
+
+##Setup the Speech Recognition Engine, this allows the computer to listen
+$speechRecogEng = [System.Speech.Recognition.SpeechRecognitionEngine]::new();
+
+##Setup the verbal commands hello and exit
+$grammarhome = [System.Speech.Recognition.GrammarBuilder]::new();
+$grammarback = [System.Speech.Recognition.GrammarBuilder]::new();
+$grammarup = [System.Speech.Recognition.GrammarBuilder]::new();
+$grammardown = [System.Speech.Recognition.GrammarBuilder]::new();
+$grammarleft = [System.Speech.Recognition.GrammarBuilder]::new();
+$grammarright = [System.Speech.Recognition.GrammarBuilder]::new();
+$grammarselect = [System.Speech.Recognition.GrammarBuilder]::new();
+$grammarexit = [System.Speech.Recognition.GrammarBuilder]::new();
+$grammarinfo = [System.Speech.Recognition.GrammarBuilder]::new();
+$grammarreplay = [System.Speech.Recognition.GrammarBuilder]::new();
+$grammarplay = [System.Speech.Recognition.GrammarBuilder]::new();
+$grammarpause = [System.Speech.Recognition.GrammarBuilder]::new();
+$grammarff = [System.Speech.Recognition.GrammarBuilder]::new(); 
+$grammarrw = [System.Speech.Recognition.GrammarBuilder]::new();
+$grammarhome.Append('Home');
+$grammarback.Append('Back');
+$grammarup.Append('Up');
+$grammardown.Append('Down');
+$grammarleft.Append('Left');
+$grammarright.Append('Right');
+$grammarselect.Append('Select');
+$grammarexit.Append('exit');
+$grammarinfo.Append('Info');
+$grammarreplay.Append('Replay');
+$grammarplay.Append('Play');
+$grammarpause.Append('Pause');
+$grammarff.Append('Fast Forward');
+$grammarrw.Append('Rewind');
+$speechRecogEng.LoadGrammar($grammarhome);
+$speechRecogEng.LoadGrammar($grammarback);
+$speechRecogEng.LoadGrammar($grammarup);
+$speechRecogEng.LoadGrammar($grammardown);
+$speechRecogEng.LoadGrammar($grammarleft);
+$speechRecogEng.LoadGrammar($grammarright);
+$speechRecogEng.LoadGrammar($grammarselect);
+$speechRecogEng.LoadGrammar($grammarexit);
+$speechRecogEng.LoadGrammar($grammarinfo);
+$speechRecogEng.LoadGrammar($grammarreplay);
+$speechRecogEng.LoadGrammar($grammarplay);
+$speechRecogEng.LoadGrammar($grammarpause);
+$speechRecogEng.LoadGrammar($grammarff);
+$speechRecogEng.LoadGrammar($grammarrw);
+
+$speechRecogEng.InitialSilenceTimeout = 15
+$speechRecogEng.SetInputToDefaultAudioDevice();
+$cmdBoolean = $false;
+$speaker.Speak("Roku Listening")
+
+while (!$cmdBoolean) {
+    $speechRecognize = $speechRecogEng.Recognize();
+    $conf = $speechRecognize.Confidence;
+    $myWords = $speechRecognize.text;
+    if ($myWords -match 'Home' -and [double]$conf -gt .75) {
+        Send-RokuCommand -Ip $Ip -RokuCommand Home
+    }
+    if ($myWords -match 'Back' -and [double]$conf -gt .70) {
+        Send-RokuCommand -Ip $Ip -RokuCommand Back
+    }
+    if ($myWords -match 'Up' -and [double]$conf -gt .50) {
+        Send-RokuCommand -Ip $Ip -RokuCommand Up
+    }
+    if ($myWords -match 'Down' -and [double]$conf -gt .60) {
+        Send-RokuCommand -Ip $Ip -RokuCommand Down
+    }
+    if ($myWords -match 'Left' -and [double]$conf -gt .70) {
+        Send-RokuCommand -Ip $Ip -RokuCommand Left 
+    }
+    if ($myWords -match 'Right' -and [double]$conf -gt .70) {
+        Send-RokuCommand -Ip $Ip -RokuCommand 'Right'
+    }
+    if ($myWords -match 'Select' -and [double]$conf -gt .70) {
+        Send-RokuCommand -Ip $Ip -RokuCommand 'Select'
+    } 
+    if ($myWords -match 'Info' -and [double]$conf -gt .70) {
+    Send-RokuCommand -Ip $Ip -RokuCommand 'Info'
+    } 
+    if ($myWords -match 'Replay' -and [double]$conf -gt .70) {
+    Send-RokuCommand -Ip $Ip -RokuCommand 'Replay'
+    } 
+    if ($myWords -match 'Play' -and [double]$conf -gt .70) {
+    Send-RokuCommand -Ip $Ip -RokuCommand 'Play'
+    } 
+    if ($myWords -match 'Pause' -and [double]$conf -gt .70) {
+    Send-RokuCommand -Ip $Ip -RokuCommand 'Play'
+    } 
+    if ($myWords -match 'Fast Forward' -and [double]$conf -gt .70) {
+    Send-RokuCommand -Ip $Ip -RokuCommand 'Fast Forward'
+    } 
+    if ($myWords -match 'Rewind' -and [double]$conf -gt .70) {
+    Send-RokuCommand -Ip $Ip -RokuCommand 'Rewind'
+    } 
+    
+    
+    
+    if ($myWords -match 'exit' -and [double]$conf -gt .70) {
+        $speaker.Speak('Goodbye');
+        $cmdBoolean = $true;
+        Stop-Job -Name RokuVoice
+        Remove-Job -Name RokuVoice
+        $form.Close()
+    }
+}
+
+}
 
 Function Send-RokuReboot {
     param(
@@ -241,11 +365,21 @@ Function Send-RokuApp {
     }
 }
 
+#endregion
+
+#region GUI Functions
+
 Function Select-RokuApp {
     param(
     [Parameter(Mandatory)] 
     [string]
-    $Ip
+    $Ip,
+    [string]
+    $backcolor,
+    [string]
+    $textcolor,
+    [string]
+    $buttoncolor
     )   
 
     if ($PSVersionTable.PSVersion.Major -ge 6){
@@ -265,13 +399,17 @@ Function Select-RokuApp {
     Add-Type -AssemblyName System.Drawing
     Add-Type -AssemblyName PresentationFramework
     
+    if(!$backcolor){$backcolor = 'MidnightBlue'}
+    if(!$textcolor){$textcolor = 'Cyan'}
+    if(!$buttoncolor){$buttoncolor = 'Blue'}
+
     #region Apps Listbox Gui
     $Form                           = New-Object System.Windows.Forms.Form
     $Form.Icon                      = $IconPath
     $Form.text                      = 'Select an App'
     $Form.clientSize                 = '400,530'
     $Form.startposition             = 'CenterScreen'
-    $Form.backcolor                 = 'MidnightBlue'
+    $Form.backcolor                 = $BackColor
     $Form.FormBorderStyle           = 'FixedSingle'
     $Form.MaximizeBox                = $false
 
@@ -281,8 +419,8 @@ Function Select-RokuApp {
     $OKButton.text                  = 'OK'
     $OKButton.dialogresult          = [System.Windows.Forms.DialogResult]::OK
     $OKButton.font                  = 'Microsoft Sans Serif,12'
-    $OKButton.forecolor             = 'Cyan'
-    $OKButton.backcolor             = 'Blue'
+    $OKButton.forecolor             = $textcolor
+    $OKButton.backcolor             = $buttoncolor
     $Form.acceptbutton              = $OKButton
 
     $CancelButton                   = New-Object System.Windows.Forms.Button
@@ -291,8 +429,8 @@ Function Select-RokuApp {
     $CancelButton.text              = 'Cancel'
     $CancelButton.dialogResult      = [System.Windows.Forms.DialogResult]::Cancel
     $CancelButton.font              = 'Microsoft Sans Serif,11'
-    $CancelButton.foreColor         = 'Cyan'
-    $CancelButton.backcolor         = 'Blue'
+    $CancelButton.foreColor         = $TextColor
+    $CancelButton.backcolor         = $ButtonColor
     $Form.cancelbutton              = $CancelButton
 
     $Label                          = New-Object System.Windows.Forms.Label
@@ -300,22 +438,22 @@ Function Select-RokuApp {
     $Label.size                     = New-Object System.Drawing.Size(280,20)
     $Label.text                     = 'Launch which app on:'
     $Label.font                     = 'Consolas,12'
-    $Label.forecolor                = 'Cyan'
+    $Label.forecolor                = $TextColor
     
     $Label2                          = New-Object System.Windows.Forms.Label
     $Label2.location                 = New-Object System.Drawing.Point(10,35)
     $Label2.size                     = New-Object System.Drawing.Size(280,20)
     $Label2.text                     = "$RokuName"
     $Label2.font                     = 'Consolas,12'
-    $Label2.forecolor                = 'Cyan'
+    $Label2.forecolor                = $TextColor
 
     $Listbox                        = New-Object System.Windows.Forms.ListBox
     $Listbox.location               = New-Object System.Drawing.Point(10,60)
     $Listbox.size                   = New-Object System.Drawing.Size(380,20)
     $Listbox.height                 = 420
     $Listbox.font                   = New-Object System.Drawing.Font('Consolas','14',[System.Drawing.FontStyle]::Bold)
-    $Listbox.BackColor              = 'DarkBlue'
-    $Listbox.ForeColor              = 'Cyan'
+    $Listbox.BackColor              = $backcolor
+    $Listbox.ForeColor              = $TextColor
 
     $Form.Controls.AddRange(@($Label,$Label2,$CancelButton,$OKButton,$Listbox))
 
@@ -341,13 +479,23 @@ Function Set-RokuFavApps {
 param(
     [Parameter(Mandatory)] 
     [string]
-    $Ip
+    $Ip,
+    [string]
+    $backcolor,
+    [string]
+    $textcolor,
+    [string]
+    $buttoncolor
     )   
 
     if ($PSVersionTable.PSVersion.Major -ge 6){
         Write-Error -Message "This GUI based function is not compatible with PowerShell 6."
         return
         }
+
+    if(!$backcolor){$backcolor = 'MidnightBlue'}
+    if(!$textcolor){$textcolor = 'Cyan'}
+    if(!$buttoncolor){$buttoncolor = 'Blue'}
 
 #region WPF Form App Selection List
     
@@ -367,7 +515,7 @@ param(
     $Form.text                      = 'Select an App'
     $Form.clientSize                 = '400,530'
     $Form.startposition             = 'CenterScreen'
-    $Form.backcolor                 = 'MidnightBlue'
+    $Form.backcolor                 = $BackColor
     $Form.FormBorderStyle           = 'FixedSingle'
     $Form.MaximizeBox                = $false
 
@@ -377,8 +525,8 @@ param(
     $OKButton.text                  = 'OK'
     $OKButton.dialogresult          = [System.Windows.Forms.DialogResult]::OK
     $OKButton.font                  = 'Microsoft Sans Serif,12'
-    $OKButton.forecolor             = 'Cyan'
-    $OKButton.backcolor             = 'Blue'
+    $OKButton.forecolor             = $TextColor
+    $OKButton.backcolor             = $ButtonColor
     $Form.acceptbutton              = $OKButton
 
     $CancelButton                   = New-Object System.Windows.Forms.Button
@@ -387,8 +535,8 @@ param(
     $CancelButton.text              = 'Cancel'
     $CancelButton.dialogResult      = [System.Windows.Forms.DialogResult]::Cancel
     $CancelButton.font              = 'Microsoft Sans Serif,11'
-    $CancelButton.foreColor         = 'Cyan'
-    $CancelButton.backcolor         = 'Blue'
+    $CancelButton.foreColor         = $TextColor
+    $CancelButton.backcolor         = $ButtonColor
     $Form.cancelbutton              = $CancelButton
 
     $Label                          = New-Object System.Windows.Forms.Label
@@ -396,15 +544,15 @@ param(
     $Label.size                     = New-Object System.Drawing.Size(280,20)
     $Label.text                     = 'Select 4 favorite apps'
     $Label.font                     = 'Consolas,12'
-    $Label.forecolor                = 'Cyan'
+    $Label.forecolor                = $TextColor
     
     $Listbox                        = New-Object System.Windows.Forms.CheckedListBox
     $Listbox.location               = New-Object System.Drawing.Point(10,40)
     $Listbox.size                   = New-Object System.Drawing.Size(380,20)
     $Listbox.height                 = 430
     $Listbox.font                   = New-Object System.Drawing.Font('Consolas','14',[System.Drawing.FontStyle]::Bold)
-    $Listbox.BackColor              = 'DarkBlue'
-    $Listbox.ForeColor              = 'Cyan'
+    $Listbox.BackColor              = $backcolor
+    $Listbox.ForeColor              = $TextColor
     $Listbox.CheckOnClick           = $True
 
     $Form.Controls.AddRange(@($Label,$Label2,$CancelButton,$OKButton,$Listbox))
@@ -463,8 +611,178 @@ $FavButton4.BackgroundImageLayout = 'Stretch'
 
 }
 
+Function Send-RokuVoiceGui {
+    
+    param(
+    [Parameter(Mandatory)] 
+    [string]
+    $Ip,
+    [string]
+    $backcolor,
+    [string]
+    $textcolor,
+    [string]
+    $buttoncolor
+    )   
 
-#Hidden Menus (some might work) Reference: https://lifehacker.com/all-the-roku-secret-commands-and-menus-in-one-graphic-1779010902
+$help = '
+Voice Commands:
+
+    Home
+    Back
+    Up/Down/Left/Right
+    Select (OK Button)
+    Info (* Button)
+    Play/Pause
+    Replay
+    Fast Forward
+    Rewind
+'
+
+
+
+
+Add-Type -AssemblyName System.Windows.Forms
+[System.Windows.Forms.Application]::EnableVisualStyles()
+
+$rokuname = Get-LocalRokus | Where-Object IP -Like $Ip | Select-Object -ExpandProperty "Name"
+
+if(!$backcolor){$backcolor = 'MidnightBlue'}
+if(!$textcolor){$textcolor = 'Cyan'}
+if(!$buttoncolor){$buttoncolor = 'Blue'}
+
+$IconName                        = 'rokuremote.ico'
+$IconPath                        = Join-Path $PSScriptRoot $IconName
+$voicestatus                     = $null
+
+#region begin GUI{ 
+
+$Form                            = New-Object system.Windows.Forms.Form
+$Form.ClientSize                 = '260,380'
+$Form.text                       = $rokuname
+$Form.TopMost                    = $false
+$Form.TabIndexChanged
+$Form.BackColor                  = $BackColor
+$Form.Icon                       = $IconPath
+$Form.FormBorderStyle           = 'FixedSingle'
+$Form.MaximizeBox                = $false
+
+$Button1                         = New-Object system.Windows.Forms.Button
+$Button1.text                    = "Start"
+$Button1.width                   = 60
+$Button1.height                  = 30
+$Button1.location                = New-Object System.Drawing.Point(20,80)
+$Button1.Font                    = 'Microsoft Sans Serif,10'
+$Button1.backcolor               = $ButtonColor
+$Button1.ForeColor               = $TextColor
+
+$Button2                         = New-Object system.Windows.Forms.Button
+$Button2.text                    = "Stop"
+$Button2.width                   = 60
+$Button2.height                  = 30
+$Button2.location                = New-Object System.Drawing.Point(90,80)
+$Button2.Font                    = 'Microsoft Sans Serif,10'
+$Button2.backcolor               = $ButtonColor
+$Button2.ForeColor               = $TextColor
+
+$Button3                         = New-Object system.Windows.Forms.Button
+$Button3.text                    = "Close"
+$Button3.width                   = 60
+$Button3.height                  = 30
+$Button3.location                = New-Object System.Drawing.Point(160,80)
+$Button3.Font                    = 'Microsoft Sans Serif,10'
+$Button3.backcolor               = $ButtonColor
+$Button3.ForeColor               = $TextColor
+
+$RokuNameLabel                          = New-Object system.Windows.Forms.Label
+$RokuNameLabel.text                     = "$rokuname"
+$RokuNameLabel.AutoSize                 = $true
+$RokuNameLabel.width                    = 25
+$RokuNameLabel.height                   = 12
+$RokuNameLabel.location                 = New-Object System.Drawing.Point(10,10)
+$RokuNameLabel.Font                     = 'Microsoft Sans Serif,12'
+$RokuNameLabel.ForeColor                = $TextColor
+
+$VoiceStatusLabel                          = New-Object system.Windows.Forms.Label
+$VoiceStatusLabel.text                     = "Voice Status: $voicestatus"
+$VoiceStatusLabel.AutoSize                 = $true
+$VoiceStatusLabel.width                    = 25
+$VoiceStatusLabel.height                   = 12
+$VoiceStatusLabel.location                 = New-Object System.Drawing.Point(10,40)
+$VoiceStatusLabel.Font                     = 'Microsoft Sans Serif,16'
+$VoiceStatusLabel.ForeColor                = $TextColor
+
+$HelpLabel                          = New-Object system.Windows.Forms.Label
+$HelpLabel.text                     = "$help"
+$HelpLabel.AutoSize                 = $true
+$HelpLabel.width                    = 25
+$HelpLabel.height                   = 12
+$HelpLabel.location                 = New-Object System.Drawing.Point(10,115)
+$HelpLabel.Font                     = 'Microsoft Sans Serif,12'
+$HelpLabel.ForeColor                = $TextColor
+
+$Form.controls.AddRange(@($Button1,$Button2,$RokuNameLabel,$Button3,$VoiceStatusLabel,$HelpLabel))
+
+#region gui events {
+
+$Button1.Add_Click({
+    $voicestatus = 'Starting...'
+    $VoiceStatusLabel.text = "Voice Status: $voicestatus"
+    Start-Job -Name RokuVoice -ArgumentList $Ip -ScriptBlock {
+        Import-Module C:\Scripts\roku-remote\Roku-Remote.psm1
+        Start-RokuVoice -ip $args[0]
+        }
+    if (Get-Job -Name RokuVoice){
+        $voicestatus = 'Listening'
+        $VoiceStatusLabel.ForeColor = 'Green'
+        $VoiceStatusLabel.text = "Voice Status: $voicestatus"
+        }
+    })
+
+$Button2.Add_Click({
+    Stop-Job -Name RokuVoice
+    Remove-Job -Name RokuVoice
+    if (!(get-job -Name RokuVoice)){$voicestatus = 'Stopped'
+    $VoiceStatusLabel.ForeColor = "$textcolor"
+    $VoiceStatusLabel.text = "Voice Status: $voicestatus"
+    }
+    })
+
+$Button3.Add_Click({
+    Stop-Job -Name RokuVoice
+    Remove-Job -Name RokuVoice
+    if (!(get-job -Name RokuVoice)){$voicestatus = 'Stopped'
+    $VoiceStatusLabel.text = "Voice Status: $voicestatus"
+    $VoiceStatusLabel.ForeColor = "$textcolor"}
+    Stop-Job -Name RokuVoiceGui
+    Remove-Job -Name RokuVoiceGui
+    $Form.Close()
+    })
+
+#endregion events }
+
+#endregion GUI }
+
+
+#Write your logic code here
+
+    Start-Job -Name 'RokuVoice' -ArgumentList $Ip -ScriptBlock {
+        Import-Module C:\Scripts\roku-remote\Roku-Remote.psm1
+        Start-RokuVoice -ip $args[0]
+        }
+    if ((Get-Job -Name RokuVoice).State -like "Running"){
+        $voicestatus = 'Listening'
+        $VoiceStatusLabel.ForeColor = "Green"
+        $VoiceStatusLabel.text = "Voice Status: $voicestatus"
+        }
+
+    [void][System.Windows.Forms.Application]::Run($form)
+
+}
+
+#endregion
+
+#region Hidden Menus (some might work) Reference: https://lifehacker.com/all-the-roku-secret-commands-and-menus-in-one-graphic-1779010902
 
 Function Send-RokuSecretMenu1 {
         param(
@@ -609,3 +927,5 @@ Function Send-DeveloperMenu {
     Send-RokuCommand -ip $Ip -RokuCommand 'Right'
     
     } #Does not work with function. Works with real remote.
+
+#endregion 
