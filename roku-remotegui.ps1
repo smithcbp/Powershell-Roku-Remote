@@ -657,7 +657,7 @@ $form.KeyPreview = $true
 #region Find and List Rokus on Local Network
 
 Function Find-Rokus {
-#$Rokus = Get-LocalRokus | Sort-Object "Name"
+$Rokus = Get-LocalRokus | Sort-Object "Name"
 $Rokus += Import-Csv $env:Temp\addedrokus.csv
 $Rokus = $Rokus | Sort-Object Name -Unique
 $RokuList.Items.Clear()
