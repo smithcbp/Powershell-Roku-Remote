@@ -92,6 +92,7 @@ $ShowHelp={
     "RebootButton" {$tip = 'Reboot'}
     "VoiceButton" {$tip = 'Enable Voice Recognition/Control'}
     "ChangeFavButton" {$tip = "Select New Favorites"}
+    "AddRokuButton" {$tip = "Manually Add Roku by IP Address"}
     }
 
  $tooltip1.SetToolTip($this,$tip)

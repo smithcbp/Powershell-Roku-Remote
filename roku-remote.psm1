@@ -47,7 +47,7 @@ Function Get-LocalRokus {
         return
         }
 
-$RokuOUIS = @(
+    $RokuOUIS = @(
     'DC-3A-5E'
     'D0-4D-2C'
     'CC-6D-A0'
@@ -61,25 +61,25 @@ $RokuOUIS = @(
     '08-05-81'
     '00-0D-4B'
     )
-$Rokus = @()
-$RokuIps = @()
+    $Rokus = @()
+    $RokuIps = @()
 
-if($usearp -eq $True){
+    if($usearp -eq $True){
     $arp = arp -a
     $regex = '\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b'
     foreach ($item in $RokuOUIS){
         [string]$RokuArp = $arp | Select-String -Pattern $item
         $RokuIps += $Rokuarp | Select-String -Pattern $regex | ForEach-Object { $_.Matches } | ForEach-Object { $_.Value } 
     }
-}
+    }
 
-else{
-    foreach($Oui in $RokuOUIS) {
-        $RokuIps += Get-NetNeighbor -LinkLayerAddress $Oui*
-        }
-}
+    else{
+        foreach($Oui in $RokuOUIS) {
+            $RokuIps += Get-NetNeighbor -LinkLayerAddress $Oui*
+            }
+    }
 
-$Rokus = foreach ($RokuIp_Item in $RokuIps) {
+    $Rokus = foreach ($RokuIp_Item in $RokuIps) {
     if ($usearp){$Ip = $RokuIp_Item}
     if (!$usearp){$Ip = $RokuIp_Item.IPAddress | Out-String}
     $Ip = $Ip.Trim()
@@ -95,7 +95,7 @@ $Rokus = foreach ($RokuIp_Item in $RokuIps) {
         Description = $RokuName + ' | ' + $Ip
         }
     }
-Write-Output $Rokus
+    Write-Output $Rokus
 }
 
 Function Add-Roku {
@@ -339,6 +339,7 @@ Function Get-RokuApps {
     [xml]$Appsxml = $AppsWeb.Content
     Write-Output $Appsxml.apps.app
 }
+
 Function Get-RokuAppImage {
     param(
     [Parameter(Mandatory)] 
@@ -365,6 +366,7 @@ Function Get-RokuAppImage {
     if (!(Test-Path $DestFile)) {Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/query/icon/$Appid" -method Get -OutFile $DestFile}
     }
 }
+
 Function Send-RokuApp {
     param(
     [Parameter(Mandatory)] 
