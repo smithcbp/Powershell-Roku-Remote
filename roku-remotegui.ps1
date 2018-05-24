@@ -28,6 +28,27 @@ $textcolor                       = 'Cyan'
 
 #endregion
 
+#region Help Message
+$HelpMessage = "
+Keyboard Shortcuts:
+
+W  =  Up
+A  =  Left
+S  =  Down
+D  =  Right
+Space  =  Select
+H  =  Home
+B  =  Back
+C  =  Channels (Apps)
+I  =  Info (*Options)
+1-4  =  Favorite Apps 1-4
+Up/Down Arrow  =  Change Roku
+?  =  Display this message.
+
+Created by Chris Smith
+https://github.com/smithcbp/Powershell-Roku-Remote"
+
+#endregion
 
 #region Add required assemblies.
 
@@ -77,6 +98,7 @@ $ShowHelp={
 
 } #end ShowHelp
 
+#endregion
 
 #region Build GUI
 
@@ -99,6 +121,17 @@ $Label1.height                   = 10
 $Label1.location                 = New-Object System.Drawing.Point(20,20)
 $Label1.font                     = 'Consolas,18'
 $Label1.forecolor                = $textcolor
+
+$AddRokuButton                        = New-Object System.Windows.Forms.Button
+$AddRokuButton.Name                   = 'AddRokuButton'
+$AddRokuButton.text                   = 'Add by IP'
+$AddRokuButton.width                  = 120
+$AddRokuButton.height                 = 25
+$AddRokuButton.location               = New-Object System.Drawing.Point(200,25)
+$AddRokuButton.font                   = 'Microsoft Sans Serif,10'
+$AddRokuButton.backcolor              = $ButtonColor
+$AddRokuButton.forecolor              = $textcolor
+$AddRokuButton.Add_MouseHover($ShowHelp)
 
 $UpButton                        = New-Object System.Windows.Forms.Button
 $UpButton.Name                   = 'UpButton'
@@ -123,7 +156,7 @@ $DownButton.forecolor            = $textcolor
 $DownButton.Add_MouseHover($ShowHelp)
 
 $RightButton                     = New-Object System.Windows.Forms.Button
-$RightButton.Name                 = 'RightButton' 
+$RightButton.Name                = 'RightButton' 
 $RightButton.text                = '►'
 $RightButton.width               = 60
 $RightButton.height              = 60
@@ -280,7 +313,7 @@ $FavLabel.forecolor                = $textcolor
 $FavLabel.Add_MouseHover($ShowHelp)
 
 $ChangeFavButton                   = New-Object System.Windows.Forms.Button
-$ChangeFavButton.Name                 = 'ChangeFavButton' 
+$ChangeFavButton.Name              = 'ChangeFavButton' 
 $ChangeFavButton.width             = 30
 $ChangeFavButton.height            = 20
 $ChangeFavButton.location          = New-Object System.Drawing.Point(155,488)
@@ -348,10 +381,9 @@ $VoiceButton.backcolor          = $ButtonColor
 $VoiceButton.forecolor          = $textcolor
 $VoiceButton.Add_MouseHover($ShowHelp)
 
-$Form.controls.AddRange(@($UpButton,$DownButton,$RightButton,$SelectButton,$LeftButton,$BackButton,$HomeButton,$RebootButton,$AppsButton,$RokuList,$Label1,$InfoButton,$ReplayButton,$RRButton,$PlayButton,$FFButton,$FavButton1,$FavButton2,$FavButton3,$FavButton4,$FavLabel,$ChangeFavButton,$SearchButton,$VoiceButton))
+$Form.controls.AddRange(@($AddRokuButton,$UpButton,$DownButton,$RightButton,$SelectButton,$LeftButton,$BackButton,$HomeButton,$RebootButton,$AppsButton,$RokuList,$Label1,$InfoButton,$ReplayButton,$RRButton,$PlayButton,$FFButton,$FavButton1,$FavButton2,$FavButton3,$FavButton4,$FavLabel,$ChangeFavButton,$SearchButton,$VoiceButton))
 
 #endregion
-
 
 #region Import Roku-Remote.psm1 module
 
@@ -365,6 +397,17 @@ Import-Module -Force (Resolve-Path($modulepath))
 #endregion
 
 #region GUI Events
+
+$AddRokuButton.Add_Click({    
+    $IP = [Microsoft.VisualBasic.Interaction]::InputBox("Enter IP Address:", "Add Roku by IP Address")
+    $roku = add-roku -ip $IP
+    if(!($roku.name)){
+        Write-Error "No Roku found at $IP"
+        [System.Windows.MessageBox]::Show("No Roku found at $IP","Error")
+        return}
+    if($roku.name){ $roku | Export-Csv -NoTypeInformation -Append -Path $env:Temp\addedrokus.csv }
+    Find-Rokus
+    })
 
 $UpButton.Add_Click({    
     Send-RokuCommand -ip $RokuList.SelectedItem.IP -RokuCommand 'Up'
@@ -423,7 +466,7 @@ $AppsButton.Add_Click({
 
 $ChangeFavButton.Add_Click({
     Set-RokuFavApps -Ip $RokuList.SelectedItem.IP -backcolor $backcolor -textcolor $textcolor -buttoncolor $buttoncolor
-    Set-FavAppsPics 
+    Set-FavAppsPics -Ip $RokuList.SelectedItem.IP
     })
 
 $FavButton1.Add_Click({    
@@ -469,7 +512,7 @@ $SearchButton.Add_Click({
 
 #region Keyboard Controls
 
-$keys = @('W','S','A','D','Space','H','B','C','I','1-4')
+## $keys = @('W','S','A','D','Space','H','B','C','I','1-4')
 
 $form.Add_KeyDown({
     if($_.KeyCode -eq 'W'){
@@ -613,9 +656,13 @@ $form.KeyPreview = $true
 
 #region Find and List Rokus on Local Network
 
-$Rokus = Get-LocalRokus | sort "Name"
+Function Find-Rokus {
+#$Rokus = Get-LocalRokus | Sort-Object "Name"
+$Rokus += Import-Csv $env:Temp\addedrokus.csv
+$Rokus = $Rokus | Sort-Object Name -Unique
+$RokuList.Items.Clear()
 
-if (!$Rokus) {
+if (!$Rokus) {  
     $RokuList.Items.Add("##### No Rokus Found! #####")
     $Rokulist.SelectedItem = $RokuList.Items[0]
     }
@@ -626,11 +673,14 @@ if ($Rokus){
     $Rokulist.SelectedItem = $RokuList.Items[0]
     }
 
+}
 #endregion
+
+Find-Rokus
 
 #region Collect Favorite App Images
 
-Set-FavAppsPics
+Set-FavAppsPics -IP $RokuList.SelectedItem.IP
 
 #endregion
 

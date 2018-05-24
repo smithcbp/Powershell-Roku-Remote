@@ -69,7 +69,7 @@ if($usearp -eq $True){
     $regex = '\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b'
     foreach ($item in $RokuOUIS){
         [string]$RokuArp = $arp | Select-String -Pattern $item
-        $RokuIps += $Rokuarp | Select-String -Pattern $regex | % { $_.Matches } | % { $_.Value } 
+        $RokuIps += $Rokuarp | Select-String -Pattern $regex | ForEach-Object { $_.Matches } | ForEach-Object { $_.Value } 
     }
 }
 
@@ -96,6 +96,28 @@ $Rokus = foreach ($RokuIp_Item in $RokuIps) {
         }
     }
 Write-Output $Rokus
+}
+
+Function Add-Roku {
+    param(
+    [Parameter(Mandatory)] 
+    [string]
+    $Ip
+    )
+
+    $Ip = $Ip.Trim()
+    $Uri = 'http://' + $Ip + ':8060'
+    $Rokuweb = (Invoke-WebRequest -UseBasicParsing $Uri)
+    [xml]$RokuXML = $Rokuweb.Content
+    $RokuName = $RokuXML.root.device.friendlyName
+    $RokuModel = $RokuXML.root.device.modelname + ' ' + $RokuXML.root.device.modelnumber
+    [pscustomobject]@{
+        Ip = $Ip
+        Name = $RokuName
+        Model = $RokuModel
+        Description = $RokuName + ' | ' + $Ip
+        }
+
 }
 
 Function Send-RokuCommand {   
@@ -150,107 +172,107 @@ Function Start-RokuVoice{
     )
 
 
-[void][System.Reflection.Assembly]::LoadWithPartialName("System.Speech");
+    [void][System.Reflection.Assembly]::LoadWithPartialName("System.Speech");
 
-##Setup the speaker, this allows the computer to talk
-$speaker = [System.Speech.Synthesis.SpeechSynthesizer]::new();
-$speaker.SelectVoice('Microsoft Zira Desktop');
+    ##Setup the speaker, this allows the computer to talk
+    $speaker = [System.Speech.Synthesis.SpeechSynthesizer]::new();
+    $speaker.SelectVoice('Microsoft Zira Desktop');
 
-##Setup the Speech Recognition Engine, this allows the computer to listen
-$speechRecogEng = [System.Speech.Recognition.SpeechRecognitionEngine]::new();
+    ##Setup the Speech Recognition Engine, this allows the computer to listen
+    $speechRecogEng = [System.Speech.Recognition.SpeechRecognitionEngine]::new();
 
-##Setup the verbal commands hello and exit
-$grammarhome = [System.Speech.Recognition.GrammarBuilder]::new();
-$grammarback = [System.Speech.Recognition.GrammarBuilder]::new();
-$grammarup = [System.Speech.Recognition.GrammarBuilder]::new();
-$grammardown = [System.Speech.Recognition.GrammarBuilder]::new();
-$grammarleft = [System.Speech.Recognition.GrammarBuilder]::new();
-$grammarright = [System.Speech.Recognition.GrammarBuilder]::new();
-$grammarselect = [System.Speech.Recognition.GrammarBuilder]::new();
-$grammarexit = [System.Speech.Recognition.GrammarBuilder]::new();
-$grammarinfo = [System.Speech.Recognition.GrammarBuilder]::new();
-$grammarreplay = [System.Speech.Recognition.GrammarBuilder]::new();
-$grammarplay = [System.Speech.Recognition.GrammarBuilder]::new();
-$grammarpause = [System.Speech.Recognition.GrammarBuilder]::new();
-$grammarff = [System.Speech.Recognition.GrammarBuilder]::new(); 
-$grammarrw = [System.Speech.Recognition.GrammarBuilder]::new();
-$grammarhome.Append('Home');
-$grammarback.Append('Back');
-$grammarup.Append('Up');
-$grammardown.Append('Down');
-$grammarleft.Append('Left');
-$grammarright.Append('Right');
-$grammarselect.Append('Select');
-$grammarexit.Append('exit');
-$grammarinfo.Append('Info');
-$grammarreplay.Append('Replay');
-$grammarplay.Append('Play');
-$grammarpause.Append('Pause');
-$grammarff.Append('Fast Forward');
-$grammarrw.Append('Rewind');
-$speechRecogEng.LoadGrammar($grammarhome);
-$speechRecogEng.LoadGrammar($grammarback);
-$speechRecogEng.LoadGrammar($grammarup);
-$speechRecogEng.LoadGrammar($grammardown);
-$speechRecogEng.LoadGrammar($grammarleft);
-$speechRecogEng.LoadGrammar($grammarright);
-$speechRecogEng.LoadGrammar($grammarselect);
-$speechRecogEng.LoadGrammar($grammarexit);
-$speechRecogEng.LoadGrammar($grammarinfo);
-$speechRecogEng.LoadGrammar($grammarreplay);
-$speechRecogEng.LoadGrammar($grammarplay);
-$speechRecogEng.LoadGrammar($grammarpause);
-$speechRecogEng.LoadGrammar($grammarff);
-$speechRecogEng.LoadGrammar($grammarrw);
+    ##Setup the verbal commands hello and exit
+    $grammarhome = [System.Speech.Recognition.GrammarBuilder]::new();
+    $grammarback = [System.Speech.Recognition.GrammarBuilder]::new();
+    $grammarup = [System.Speech.Recognition.GrammarBuilder]::new();
+    $grammardown = [System.Speech.Recognition.GrammarBuilder]::new();
+    $grammarleft = [System.Speech.Recognition.GrammarBuilder]::new();
+    $grammarright = [System.Speech.Recognition.GrammarBuilder]::new();
+    $grammarselect = [System.Speech.Recognition.GrammarBuilder]::new();
+    $grammarexit = [System.Speech.Recognition.GrammarBuilder]::new();
+    $grammarinfo = [System.Speech.Recognition.GrammarBuilder]::new();
+    $grammarreplay = [System.Speech.Recognition.GrammarBuilder]::new();
+    $grammarplay = [System.Speech.Recognition.GrammarBuilder]::new();
+    $grammarpause = [System.Speech.Recognition.GrammarBuilder]::new();
+    $grammarff = [System.Speech.Recognition.GrammarBuilder]::new(); 
+    $grammarrw = [System.Speech.Recognition.GrammarBuilder]::new();
+    $grammarhome.Append('Home');
+    $grammarback.Append('Back');
+    $grammarup.Append('Up');
+    $grammardown.Append('Down');
+    $grammarleft.Append('Left');
+    $grammarright.Append('Right');
+    $grammarselect.Append('Select');
+    $grammarexit.Append('exit');
+    $grammarinfo.Append('Info');
+    $grammarreplay.Append('Replay');
+    $grammarplay.Append('Play');
+    $grammarpause.Append('Pause');
+    $grammarff.Append('Fast Forward');
+    $grammarrw.Append('Rewind');
+    $speechRecogEng.LoadGrammar($grammarhome);
+    $speechRecogEng.LoadGrammar($grammarback);
+    $speechRecogEng.LoadGrammar($grammarup);
+    $speechRecogEng.LoadGrammar($grammardown);
+    $speechRecogEng.LoadGrammar($grammarleft);
+    $speechRecogEng.LoadGrammar($grammarright);
+    $speechRecogEng.LoadGrammar($grammarselect);
+    $speechRecogEng.LoadGrammar($grammarexit);
+    $speechRecogEng.LoadGrammar($grammarinfo);
+    $speechRecogEng.LoadGrammar($grammarreplay);
+    $speechRecogEng.LoadGrammar($grammarplay);
+    $speechRecogEng.LoadGrammar($grammarpause);
+    $speechRecogEng.LoadGrammar($grammarff);
+    $speechRecogEng.LoadGrammar($grammarrw);
 
-$speechRecogEng.InitialSilenceTimeout = 15
-$speechRecogEng.SetInputToDefaultAudioDevice();
-$cmdBoolean = $false;
-$speaker.Speak("Roku Listening")
+    $speechRecogEng.InitialSilenceTimeout = 15
+    $speechRecogEng.SetInputToDefaultAudioDevice();
+    $cmdBoolean = $false;
+    $speaker.Speak("Roku Listening")
 
-while (!$cmdBoolean) {
-    $speechRecognize = $speechRecogEng.Recognize();
-    $conf = $speechRecognize.Confidence;
-    $myWords = $speechRecognize.text;
-    if ($myWords -match 'Home' -and [double]$conf -gt .75) {
-        Send-RokuCommand -Ip $Ip -RokuCommand Home
-    }
-    if ($myWords -match 'Back' -and [double]$conf -gt .70) {
-        Send-RokuCommand -Ip $Ip -RokuCommand Back
-    }
-    if ($myWords -match 'Up' -and [double]$conf -gt .50) {
-        Send-RokuCommand -Ip $Ip -RokuCommand Up
-    }
-    if ($myWords -match 'Down' -and [double]$conf -gt .60) {
-        Send-RokuCommand -Ip $Ip -RokuCommand Down
-    }
-    if ($myWords -match 'Left' -and [double]$conf -gt .70) {
-        Send-RokuCommand -Ip $Ip -RokuCommand Left 
-    }
-    if ($myWords -match 'Right' -and [double]$conf -gt .70) {
-        Send-RokuCommand -Ip $Ip -RokuCommand 'Right'
-    }
-    if ($myWords -match 'Select' -and [double]$conf -gt .70) {
-        Send-RokuCommand -Ip $Ip -RokuCommand 'Select'
-    } 
-    if ($myWords -match 'Info' -and [double]$conf -gt .70) {
-    Send-RokuCommand -Ip $Ip -RokuCommand 'Info'
-    } 
-    if ($myWords -match 'Replay' -and [double]$conf -gt .70) {
-    Send-RokuCommand -Ip $Ip -RokuCommand 'Replay'
-    } 
-    if ($myWords -match 'Play' -and [double]$conf -gt .70) {
-    Send-RokuCommand -Ip $Ip -RokuCommand 'Play'
-    } 
-    if ($myWords -match 'Pause' -and [double]$conf -gt .70) {
-    Send-RokuCommand -Ip $Ip -RokuCommand 'Play'
-    } 
-    if ($myWords -match 'Fast Forward' -and [double]$conf -gt .70) {
-    Send-RokuCommand -Ip $Ip -RokuCommand 'Fast Forward'
-    } 
-    if ($myWords -match 'Rewind' -and [double]$conf -gt .70) {
-    Send-RokuCommand -Ip $Ip -RokuCommand 'Rewind'
-    } 
+    while (!$cmdBoolean) {
+        $speechRecognize = $speechRecogEng.Recognize();
+        $conf = $speechRecognize.Confidence;
+        $myWords = $speechRecognize.text;
+        if ($myWords -match 'Home' -and [double]$conf -gt .75) {
+            Send-RokuCommand -Ip $Ip -RokuCommand Home
+        }
+        if ($myWords -match 'Back' -and [double]$conf -gt .70) {
+            Send-RokuCommand -Ip $Ip -RokuCommand Back
+        }
+        if ($myWords -match 'Up' -and [double]$conf -gt .50) {
+            Send-RokuCommand -Ip $Ip -RokuCommand Up
+        }
+        if ($myWords -match 'Down' -and [double]$conf -gt .60) {
+            Send-RokuCommand -Ip $Ip -RokuCommand Down
+        }
+        if ($myWords -match 'Left' -and [double]$conf -gt .70) {
+            Send-RokuCommand -Ip $Ip -RokuCommand Left 
+        }
+        if ($myWords -match 'Right' -and [double]$conf -gt .70) {
+            Send-RokuCommand -Ip $Ip -RokuCommand 'Right'
+        }
+        if ($myWords -match 'Select' -and [double]$conf -gt .70) {
+            Send-RokuCommand -Ip $Ip -RokuCommand 'Select'
+        } 
+        if ($myWords -match 'Info' -and [double]$conf -gt .70) {
+            Send-RokuCommand -Ip $Ip -RokuCommand 'Info'
+        } 
+        if ($myWords -match 'Replay' -and [double]$conf -gt .70) {
+            Send-RokuCommand -Ip $Ip -RokuCommand 'Replay'
+        } 
+        if ($myWords -match 'Play' -and [double]$conf -gt .70) {
+            Send-RokuCommand -Ip $Ip -RokuCommand 'Play'
+        } 
+        if ($myWords -match 'Pause' -and [double]$conf -gt .70) {
+            Send-RokuCommand -Ip $Ip -RokuCommand 'Play'
+        } 
+        if ($myWords -match 'Fast Forward' -and [double]$conf -gt .70) {
+            Send-RokuCommand -Ip $Ip -RokuCommand 'Fast Forward'
+        } 
+        if ($myWords -match 'Rewind' -and [double]$conf -gt .70) {
+            Send-RokuCommand -Ip $Ip -RokuCommand 'Rewind'
+        } 
     
     
     
@@ -261,7 +283,7 @@ while (!$cmdBoolean) {
         Remove-Job -Name RokuVoice
         $form.Close()
     }
-}
+    }
 
 }
 
@@ -304,7 +326,7 @@ Function Send-RokuReboot {
     Send-RokuCommand -ip $Ip -RokuCommand 'Right'
     Start-Sleep -Seconds 1
     Send-RokuCommand -ip $Ip -RokuCommand 'Select' 
-    }
+}
 
 Function Get-RokuApps {
     param(
@@ -317,7 +339,6 @@ Function Get-RokuApps {
     [xml]$Appsxml = $AppsWeb.Content
     Write-Output $Appsxml.apps.app
 }
-
 Function Get-RokuAppImage {
     param(
     [Parameter(Mandatory)] 
@@ -344,7 +365,6 @@ Function Get-RokuAppImage {
     if (!(Test-Path $DestFile)) {Invoke-WebRequest -UseBasicParsing -Uri "$RokuUrl/query/icon/$Appid" -method Get -OutFile $DestFile}
     }
 }
-
 Function Send-RokuApp {
     param(
     [Parameter(Mandatory)] 
@@ -392,7 +412,7 @@ Function Select-RokuApp {
     $IconName                        = 'rokuremote.ico'
     $IconPath                        = Join-Path $PSScriptRoot $IconName
 
-    $RokuName = Get-LocalRokus | Where-Object ip -Like "$ip" | select -ExpandProperty name
+    $RokuName = Get-LocalRokus | Where-Object ip -Like "$ip" | Select-Object -ExpandProperty name
 
     Add-Type -AssemblyName System.Windows.Forms
     [System.Windows.Forms.Application]::EnableVisualStyles()
@@ -460,7 +480,7 @@ Function Select-RokuApp {
     #endregion
 
     #Select App
-    $Apps = Get-RokuApps $Ip | sort "#text"
+    $Apps = Get-RokuApps $Ip | Sort-Object "#text"
     foreach ($App in $Apps){
         [void] $Listbox.Items.Add($App."#text")
     }
@@ -502,12 +522,13 @@ param(
     $IconName                        = 'rokuremote.ico'
     $IconPath                        = Join-Path $PSScriptRoot $IconName
     
-    $RokuName = Get-LocalRokus | Where-Object ip -Like "$ip" | select -ExpandProperty name
+ ###   $RokuName = Get-LocalRokus | Where-Object ip -Like "$ip" | select -ExpandProperty name
 
     Add-Type -AssemblyName System.Windows.Forms
-    [System.Windows.Forms.Application]::EnableVisualStyles()
     Add-Type -AssemblyName System.Drawing
     Add-Type -AssemblyName PresentationFramework
+    [System.Reflection.Assembly]::LoadWithPartialName('Microsoft.VisualBasic') | Out-Null
+    [System.Windows.Forms.Application]::EnableVisualStyles()
     
     #region Apps Listbox Gui
     $Form                           = New-Object System.Windows.Forms.Form
@@ -560,7 +581,7 @@ param(
     #endregion
 
     #Select App
-    $Apps = Get-RokuApps $Ip | sort "#text"
+    $Apps = Get-RokuApps $Ip | Sort-Object "#text"
     foreach ($App in $Apps){
         [void] $Listbox.Items.Add($App."#text")
     }
@@ -586,11 +607,17 @@ param(
 }
 
 Function Set-FavAppsPics {
+    param(
+    [Parameter(Mandatory)] 
+    [string]
+    $IP
+    )
 
 $FavApps = Get-Content "$env:Temp\Rokufavs.txt"
 
 foreach ($AppName in $FavApps){
-    if (!(Test-Path $env:Temp\$Appname.jpg)) {Get-RokuAppImage -Ip $Rokus[0].Ip -Name $AppName -DestFile $env:Temp\$Appname.jpg}
+    if (!(Test-Path $env:Temp\$Appname.jpg)) {
+        Get-RokuAppImage -Ip $IP -Name $AppName -DestFile $env:Temp\$Appname.jpg}
     }
 
 $FavButton1ImagePath              = "$env:Temp" + "\" + $FavApps[0] + ".jpg"
