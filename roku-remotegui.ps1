@@ -13,7 +13,7 @@
 
 #region Variables
 
-$FavApps = Get-Content "$env:Temp\Rokufavs.txt"
+
 
 $IconName = 'rokuremote.ico'
 $ModuleName = 'Roku-Remote.psm1'
@@ -24,7 +24,9 @@ $backcolor = 'MidnightBlue'
 $buttoncolor = 'Blue'
 $textcolor = 'Cyan'
 
-
+if (!(Test-Path "$env:Temp\PSRoku")){ New-Item -ItemType Directory -Path $env:Temp -Name "PSRoku" }
+$tempfolder = "$env:Temp\PSRoku"
+if (Test-Path "$tempfolder\Rokufavs.txt"){ $FavApps = Get-Content "$tempfolder\Rokufavs.txt" }
 
 #endregion
 
@@ -36,13 +38,14 @@ W  =  Up
 A  =  Left
 S  =  Down
 D  =  Right
-Space  =  Select
+Space  =  Select/OK
 H  =  Home
 B  =  Back
 C  =  Channels (Apps)
 I  =  Info (*Options)
 1-4  =  Favorite Apps 1-4
 Up/Down Arrow  =  Change Roku
+
 ?  =  Display this message.
 
 Created by Chris Smith
@@ -406,7 +409,7 @@ $AddRokuButton.Add_Click( {
             [System.Windows.MessageBox]::Show("No Roku found at $IP", "Error")
             return
         }
-        if ($roku.name) { $roku | Export-Csv -NoTypeInformation -Append -Path $env:Temp\addedrokus.csv }
+        if ($roku.name) { $roku | Export-Csv -NoTypeInformation -Append -Path $tempfolder\addedrokus.csv }
         Find-Rokus
     })
 
@@ -471,22 +474,22 @@ $ChangeFavButton.Add_Click( {
     })
 
 $FavButton1.Add_Click( {    
-        $FavApps = Get-Content "$env:Temp\Rokufavs.txt"
+        $FavApps = Get-Content "$tempfolder\Rokufavs.txt"
         Send-RokuApp -Ip $RokuList.SelectedItem.IP -Name $FavApps[0]
     })
 
 $FavButton2.Add_Click( {
-        $FavApps = Get-Content "$env:Temp\Rokufavs.txt"
+        $FavApps = Get-Content "$tempfolder\Rokufavs.txt"
         Send-RokuApp -Ip $RokuList.SelectedItem.IP -Name $FavApps[1]
     })
 
 $FavButton3.Add_Click( {
-        $FavApps = Get-Content "$env:Temp\Rokufavs.txt"
+        $FavApps = Get-Content "$tempfolder\Rokufavs.txt"
         Send-RokuApp -Ip $RokuList.SelectedItem.IP -Name $FavApps[2]
     })
 
 $FavButton4.Add_Click( {
-        $FavApps = Get-Content "$env:Temp\Rokufavs.txt"
+        $FavApps = Get-Content "$tempfolder\Rokufavs.txt"
         Send-RokuApp -Ip $RokuList.SelectedItem.IP -Name $FavApps[3]
     })
 
@@ -659,7 +662,7 @@ $form.KeyPreview = $true
 
 Function Find-Rokus {
     $Rokus = Get-LocalRokus | Sort-Object "Name"
-    $Rokus += Import-Csv $env:Temp\addedrokus.csv
+    if (Test-Path $tempfolder\addedrokus.csv) { $Rokus += Import-Csv $tempfolder\addedrokus.csv }
     $Rokus = $Rokus | Sort-Object Name -Unique
     $RokuList.Items.Clear()
 
@@ -681,7 +684,7 @@ Find-Rokus
 
 #region Collect Favorite App Images
 
-Set-FavAppsPics -IP $RokuList.SelectedItem.IP
+if (Test-Path "$tempfolder\Rokufavs.txt") { Set-FavAppsPics -IP $RokuList.SelectedItem.IP }
 
 #endregion
 

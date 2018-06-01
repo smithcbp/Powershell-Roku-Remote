@@ -37,6 +37,7 @@ Roku API https://sdkdocs.roku.com/display/sdkdoc/External+Control+API
 
 #region Non-Gui Functions
 
+$tempfolder = "$env:Temp\PSRoku"
 Function Get-LocalRokus {
     param(
         [switch]$usearp
@@ -600,7 +601,7 @@ Function Set-RokuFavApps {
             if ($Result -eq 'Cancel') {Return}
         }
 
-        Set-Content -Path "$env:TEMP/Rokufavs.txt" -Force -Value $favs
+        Set-Content -Path "$tempfolder/Rokufavs.txt" -Force -Value $favs
     }
     $favs = $favs | Out-String
     $favs
@@ -615,27 +616,27 @@ Function Set-FavAppsPics {
         $IP
     )
 
-    $FavApps = Get-Content "$env:Temp\Rokufavs.txt"
+    $FavApps = Get-Content "$tempfolder\Rokufavs.txt"
 
     foreach ($AppName in $FavApps) {
-        if (!(Test-Path $env:Temp\$Appname.jpg)) {
-            Get-RokuAppImage -Ip $IP -Name $AppName -DestFile $env:Temp\$Appname.jpg
+        if (!(Test-Path $tempfolder\$Appname.jpg)) {
+            Get-RokuAppImage -Ip $IP -Name $AppName -DestFile $tempfolder\$Appname.jpg
         }
     }
 
-    $FavButton1ImagePath = "$env:Temp" + "\" + $FavApps[0] + ".jpg"
+    $FavButton1ImagePath = "$tempfolder" + "\" + $FavApps[0] + ".jpg"
     $FavButton1.BackgroundImage = [System.Drawing.Image]::FromFile($FavButton1ImagePath)
     $FavButton1.BackgroundImageLayout = 'Stretch'
 
-    $FavButton2ImagePath = "$env:Temp" + "\" + $FavApps[1] + ".jpg"
+    $FavButton2ImagePath = "$tempfolder" + "\" + $FavApps[1] + ".jpg"
     $FavButton2.BackgroundImage = [System.Drawing.Image]::FromFile($FavButton2ImagePath)
     $FavButton2.BackgroundImageLayout = 'Stretch'
 
-    $FavButton3ImagePath = "$env:Temp" + "\" + $FavApps[2] + ".jpg"
+    $FavButton3ImagePath = "$tempfolder" + "\" + $FavApps[2] + ".jpg"
     $FavButton3.BackgroundImage = [System.Drawing.Image]::FromFile($FavButton3ImagePath)
     $FavButton3.BackgroundImageLayout = 'Stretch'
 
-    $FavButton4ImagePath = "$env:Temp" + "\" + $FavApps[3] + ".jpg"
+    $FavButton4ImagePath = "$tempfolder" + "\" + $FavApps[3] + ".jpg"
     $FavButton4.BackgroundImage = [System.Drawing.Image]::FromFile($FavButton4ImagePath)
     $FavButton4.BackgroundImageLayout = 'Stretch'
 
